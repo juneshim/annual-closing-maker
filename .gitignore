@@ -1,0 +1,17 @@
+# 의존성 라이브러리 (용량이 크고 명령어 한 번으로 설치 가능하므로 제외)
+node_modules/
+jspm_packages/
+
+# 빌드 결과물 (배포 시 생성되므로 제외)
+dist/
+build/
+out/
+.next/
+bin/
+obj/
+
+# 가이드라인
+guidelines/
+
+# 에셋
+public/assets/
