@@ -161,14 +161,14 @@ export function Editor({ template, images, containerRef }: EditorProps) {
   return (
     <div className="flex flex-col items-center gap-6 w-full">
       {/* Controls for selected image */}
-      <div className="h-16 flex items-center justify-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200 w-full max-w-xl">
+      <div className="h-16 sm:h-16 flex items-center justify-center gap-2 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-slate-200 w-full max-w-xl">
         {selectedMonth ? (
           <>
-            <span className="font-medium text-slate-700">Month {selectedMonth}</span>
-            <div className="h-8 w-px bg-slate-200 mx-2" />
+            <span className="font-medium text-sm sm:text-base text-slate-700">Month {selectedMonth}</span>
+            <div className="h-6 sm:h-8 w-px bg-slate-200 mx-1 sm:mx-2" />
             <button 
               onClick={() => updateScale(selectedMonth, -0.1)}
-              className="p-2 hover:bg-slate-100 rounded-full"
+              className="p-2.5 sm:p-2 hover:bg-slate-100 rounded-full min-w-[44px] min-h-[44px] flex items-center justify-center sm:min-w-0 sm:min-h-0"
             >
               <ZoomOut size={20} />
             </button>
@@ -185,20 +185,20 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                   [selectedMonth]: { ...(prev[selectedMonth] || { x: 0, y: 0 }), scale: val }
                 }));
               }}
-              className="w-32 accent-indigo-600"
+              className="w-24 sm:w-32 accent-indigo-600"
             />
             <button 
               onClick={() => updateScale(selectedMonth, 0.1)}
-              className="p-2 hover:bg-slate-100 rounded-full"
+              className="p-2.5 sm:p-2 hover:bg-slate-100 rounded-full min-w-[44px] min-h-[44px] flex items-center justify-center sm:min-w-0 sm:min-h-0"
             >
               <ZoomIn size={20} />
             </button>
-            <div className="ml-auto text-xs text-slate-400 flex items-center gap-1">
+            <div className="ml-auto text-xs text-slate-400 flex items-center gap-1 hidden sm:flex">
               <Move size={14} /> Drag to pan
             </div>
           </>
         ) : (
-          <span className="text-slate-400">Click an image to edit position and scale</span>
+          <span className="text-xs sm:text-sm text-slate-400">Click an image to edit position and scale</span>
         )}
       </div>
 

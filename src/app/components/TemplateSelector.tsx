@@ -11,9 +11,9 @@ interface TemplateSelectorProps {
 
 export function TemplateSelector({ selectedTemplateId, onSelect }: TemplateSelectorProps) {
   return (
-    <section className="py-8">
-      <h2 className="text-2xl font-bold text-slate-800 mb-4">Select a Template</h2>
-      <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+    <section className="py-4 sm:py-6 lg:py-8">
+      <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-5">Select a Template</h2>
+      <div className="flex gap-4 sm:gap-5 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
         {TEMPLATES.map((template) => {
           const isSelected = selectedTemplateId === template.id;
           return (
@@ -21,8 +21,10 @@ export function TemplateSelector({ selectedTemplateId, onSelect }: TemplateSelec
               key={template.id}
               onClick={() => onSelect(template.id)}
               className={clsx(
-                "relative flex-shrink-0 w-64 rounded-xl border-2 transition-all overflow-hidden group text-left",
-                isSelected ? "border-indigo-600 ring-2 ring-indigo-600 ring-offset-2" : "border-slate-200 hover:border-slate-300"
+                "relative flex-shrink-0 w-[280px] sm:w-64 rounded-lg border-2 transition-all overflow-hidden group text-left shadow-sm",
+                isSelected 
+                  ? "border-indigo-600 ring-2 ring-indigo-600 ring-offset-1 shadow-md" 
+                  : "border-slate-200 hover:border-slate-300 hover:shadow"
               )}
             >
               <div className="aspect-video bg-slate-100 relative overflow-hidden">
@@ -39,14 +41,14 @@ export function TemplateSelector({ selectedTemplateId, onSelect }: TemplateSelec
                 
                 {isSelected && (
                   <div className="absolute inset-0 bg-indigo-600/10 flex items-center justify-center">
-                    <div className="bg-indigo-600 text-white p-2 rounded-full">
-                      <Check size={20} />
+                    <div className="bg-indigo-600 text-white p-1.5 rounded-full shadow-lg">
+                      <Check size={18} />
                     </div>
                   </div>
                 )}
               </div>
-              <div className="p-3 bg-white">
-                <p className="font-medium text-slate-900">{template.name}</p>
+              <div className="p-3 sm:p-3.5 bg-white">
+                <p className="font-medium text-sm sm:text-base text-slate-900 mb-0.5">{template.name}</p>
                 <p className="text-xs text-slate-500">1920 x 1080</p>
               </div>
             </button>

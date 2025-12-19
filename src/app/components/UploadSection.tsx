@@ -68,21 +68,21 @@ export function UploadSection({ images, setImages }: UploadSectionProps) {
       <div
         {...getRootProps()}
         className={clsx(
-          "border-2 border-dashed rounded-2xl p-12 text-center transition-colors cursor-pointer flex flex-col items-center justify-center min-h-[300px]",
+          "border-2 border-dashed rounded-2xl p-4 sm:p-8 lg:p-12 text-center transition-colors cursor-pointer flex flex-col items-center justify-center min-h-[200px] sm:min-h-[250px] lg:min-h-[300px]",
           isDragActive ? "border-indigo-500 bg-indigo-50" : "border-slate-300 hover:border-slate-400 bg-slate-50"
         )}
       >
         <input {...getInputProps()} />
-        <div className="bg-white p-4 rounded-full shadow-sm mb-4">
-          <Upload className="w-8 h-8 text-indigo-600" />
+        <div className="bg-white p-3 sm:p-4 rounded-full shadow-sm mb-3 sm:mb-4">
+          <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600" />
         </div>
-        <h3 className="text-xl font-semibold text-slate-900 mb-2">
+        <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-slate-900 mb-1 sm:mb-2">
           {isDragActive ? "Drop the artworks here" : "Drag & drop your images here"}
         </h3>
-        <p className="text-slate-500 mb-6">
+        <p className="text-xs sm:text-sm lg:text-base text-slate-500 mb-4 sm:mb-6">
           Upload from library • PNG or JPG • Max 10MB per image
         </p>
-        <button className="px-6 py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors">
+        <button className="px-6 py-3 sm:px-8 sm:py-3.5 lg:px-6 lg:py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors min-h-[44px] text-sm sm:text-base">
           Select Files
         </button>
       </div>

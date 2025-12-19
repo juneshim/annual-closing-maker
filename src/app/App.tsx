@@ -459,7 +459,7 @@ function App() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen bg-white text-slate-900 font-sans pb-20">
+      <div className="min-h-screen bg-white text-slate-900 font-sans pb-16 sm:pb-20">
         <Toaster position="top-center" richColors />
         
         {(isGenerating || isLoadingTemplate) && <LoadingOverlay />}
@@ -477,7 +477,7 @@ function App() {
           <Header />
 
           {!isGenerated ? (
-            <main className="space-y-12">
+            <main className="space-y-6 sm:space-y-8 lg:space-y-12">
               <UploadSection images={images} setImages={setImages} />
               
               <TemplateSelector 
@@ -485,23 +485,25 @@ function App() {
                 onSelect={setSelectedTemplateId} 
               />
 
-              <div className="flex justify-center py-8">
-                <button
-                  onClick={handleGenerateClick}
-                  disabled={!hasImages}
-                  className="px-12 py-4 bg-slate-900 text-white rounded-full text-xl font-bold shadow-lg hover:bg-slate-800 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all"
-                >
-                  Generate Recap
-                </button>
-              </div>
+              {!showMissingModal && !isGenerating && !isLoadingTemplate && (
+                <div className="sticky bottom-0 left-0 right-0 py-3 sm:py-4 px-4 sm:px-6 z-50 sm:static sm:py-6 sm:py-8">
+                  <button
+                    onClick={handleGenerateClick}
+                    disabled={!hasImages}
+                    className="w-full sm:w-auto sm:px-12 py-3.5 sm:py-4 bg-slate-900 text-white rounded-full text-base sm:text-lg lg:text-xl font-bold shadow-lg hover:bg-slate-800 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all min-h-[44px]"
+                  >
+                    Generate Recap
+                  </button>
+                </div>
+              )}
             </main>
           ) : (
-            <main className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-slate-900">Customize & Download</h2>
+            <main className="space-y-4 sm:space-y-6 lg:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Customize & Download</h2>
                 <button 
                   onClick={() => setIsGenerated(false)}
-                  className="text-slate-500 hover:text-slate-900 underline font-medium"
+                  className="text-sm sm:text-base text-slate-500 hover:text-slate-900 underline font-medium min-h-[44px] sm:min-h-0 self-start sm:self-auto"
                 >
                   Back to editing
                 </button>

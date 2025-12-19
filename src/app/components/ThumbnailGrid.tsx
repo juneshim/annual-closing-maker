@@ -58,18 +58,18 @@ function Thumbnail({ image, index, moveImage, updateImageMonth, removeImage }: T
         />
         <button
           onClick={() => removeImage(image.id)}
-          className="absolute top-1 right-1 bg-black/50 hover:bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute top-2 right-2 sm:top-1 sm:right-1 bg-black/50 hover:bg-red-500 text-white p-2 sm:p-1 rounded-full opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 transition-opacity min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 flex items-center justify-center"
         >
-          <X size={14} />
+          <X size={18} className="sm:w-3.5 sm:h-3.5" />
         </button>
       </div>
       
-      <div className="p-2 bg-slate-50">
+      <div className="p-2 sm:p-2 bg-slate-50">
         <div className="relative">
           <select
             value={image.month || ''}
             onChange={(e) => updateImageMonth(image.id, e.target.value ? Number(e.target.value) : null)}
-            className="w-full pl-7 pr-2 py-1 text-sm border-slate-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 bg-white"
+            className="w-full pl-7 pr-2 py-2.5 sm:py-1 text-sm border-slate-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 bg-white min-h-[44px] sm:min-h-0"
           >
             <option value="">Unassigned</option>
             {MONTHS.map((m, i) => (
@@ -78,7 +78,7 @@ function Thumbnail({ image, index, moveImage, updateImageMonth, removeImage }: T
               </option>
             ))}
           </select>
-          <Calendar className="absolute left-2 top-1.5 text-slate-400 pointer-events-none" size={14} />
+          <Calendar className="absolute left-2 top-2 sm:top-1.5 text-slate-400 pointer-events-none" size={16} />
         </div>
       </div>
       
@@ -117,19 +117,19 @@ export function ThumbnailGrid({ images, setImages }: ThumbnailGridProps) {
 
   return (
     <div className="mt-8">
-      <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center justify-between">
+      <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
         <span>Uploaded Artworks ({images.length})</span>
         <button 
            onClick={() => {
              // Auto assign sequential months
              setImages(prev => prev.map((img, i) => ({ ...img, month: (i % 12) + 1 })));
            }}
-           className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+           className="text-xs sm:text-sm text-indigo-600 hover:text-indigo-800 font-medium min-h-[44px] sm:min-h-0 px-2 py-1.5 sm:px-0 sm:py-0"
         >
           Auto-assign Months
         </button>
       </h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
         {images.map((image, index) => (
           <Thumbnail
             key={image.id}
