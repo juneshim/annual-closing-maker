@@ -486,11 +486,11 @@ function App() {
               />
 
               {!showMissingModal && !isGenerating && !isLoadingTemplate && (
-                <div className="sticky bottom-0 left-0 right-0 py-3 sm:py-4 px-4 sm:px-6 z-50 sm:static sm:py-6 sm:py-8">
+                <div className="sticky bottom-0 left-0 right-0 py-3 sm:py-4 px-4 sm:px-6 z-50 sm:static sm:py-6 sm:py-8 flex justify-center">
                   <button
                     onClick={handleGenerateClick}
                     disabled={!hasImages}
-                    className="w-full sm:w-auto sm:px-12 py-3.5 sm:py-4 bg-slate-900 text-white rounded-full text-base sm:text-lg lg:text-xl font-bold shadow-lg hover:bg-slate-800 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all min-h-[44px]"
+                    className="w-full sm:w-auto sm:min-w-[300px] sm:px-12 py-3.5 sm:py-4 bg-slate-900 text-white rounded-full text-base sm:text-lg lg:text-xl font-bold shadow-lg hover:bg-slate-800 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all min-h-[44px]"
                   >
                     Generate Recap
                   </button>
@@ -500,7 +500,7 @@ function App() {
           ) : (
             <main className="space-y-4 sm:space-y-6 lg:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Customize & Download</h2>
+                <h2 className="text-lg sm:text-2xl font-normal text-slate-900">Customize & Download</h2>
                 <button 
                   onClick={() => setIsGenerated(false)}
                   className="text-sm sm:text-base text-slate-500 hover:text-slate-900 underline font-medium min-h-[44px] sm:min-h-0 self-start sm:self-auto"

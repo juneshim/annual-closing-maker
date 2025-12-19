@@ -161,7 +161,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
   return (
     <div className="flex flex-col items-center gap-6 w-full">
       {/* Controls for selected image */}
-      <div className="h-16 sm:h-16 flex items-center justify-center gap-2 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-slate-200 w-full max-w-xl">
+      <div className="h-16 sm:h-16 flex items-center justify-center gap-2 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl border border-slate-200 w-full max-w-xl" style={{ boxShadow: 'none' }}>
         {selectedMonth ? (
           <>
             <span className="font-medium text-sm sm:text-base text-slate-700">Month {selectedMonth}</span>
@@ -198,7 +198,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
             </div>
           </>
         ) : (
-          <span className="text-xs sm:text-sm text-slate-400">Click an image to edit position and scale</span>
+          <span className="text-xs sm:text-sm text-slate-400" style={{ color: 'var(--sidebar-ring)' }}>Click an image to edit position and scale</span>
         )}
       </div>
 
