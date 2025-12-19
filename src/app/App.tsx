@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { ArrowLeft } from 'lucide-react';
 import { Header } from './components/Header';
 import { UploadSection } from './components/UploadSection';
 import { TemplateSelector } from './components/TemplateSelector';
@@ -503,8 +504,9 @@ function App() {
                 <h2 className="text-lg sm:text-2xl font-normal text-slate-900">Customize & Download</h2>
                 <button 
                   onClick={() => setIsGenerated(false)}
-                  className="text-sm sm:text-base text-slate-500 hover:text-slate-900 underline font-medium min-h-[44px] sm:min-h-0 self-start sm:self-auto"
+                  className="inline-flex items-center gap-1 text-sm sm:text-base text-slate-500 hover:text-slate-900 underline font-medium min-h-[44px] sm:min-h-0 self-start sm:self-auto"
                 >
+                  <ArrowLeft size={16} />
                   Back to editing
                 </button>
               </div>
