@@ -144,3 +144,4 @@ CSS transform `translate(x, y) scale(s)`의 실제 의미:
 
 **정답**: Export도 웹과 동일하게 `transformX`만 사용해야 합니다!
 
+

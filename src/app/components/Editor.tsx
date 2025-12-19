@@ -2,18 +2,31 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Template, UploadedImage, TemplateSlot } from '../types';
 import { ZoomIn, ZoomOut, Move } from 'lucide-react';
 
+/**
+ * CONSTRAINT: Coordinate System Rules
+ * 
+ * 1. All transformX/Y values are in TEMPLATE PIXEL coordinates
+ * 2. transformScale is ONLY for width/height, NEVER for position
+ * 3. containerScale is ONLY for display, NEVER in transform calculations
+ * 4. Web rendering: imgCenter = slotCenter + (transformX, transformY)
+ * 5. Export MUST use identical formula (WYSIWYG principle)
+ * 
+ * FORBIDDEN PATTERNS:
+ * - transformX * transformScale
+ * - transformY * transformScale
+ * - Any position calculation using scale
+ */
+
 interface EditorProps {
   template: Template;
-  images: UploadedImage[]; // Already assigned to months or sorted?
-  // We need a mapping of Month -> Image.
-  // The 'images' array contains images with a 'month' property.
+  images: UploadedImage[];
   containerRef: React.RefObject<HTMLDivElement | null>;
 }
 
 interface ImageTransform {
-  scale: number;
-  x: number;
-  y: number;
+  scale: number;  // ONLY for width/height, NEVER for position
+  x: number;      // Template pixel offset (center-based)
+  y: number;      // Template pixel offset (center-based)
 }
 
 export function Editor({ template, images, containerRef }: EditorProps) {
@@ -30,6 +43,8 @@ export function Editor({ template, images, containerRef }: EditorProps) {
     return map;
   }, [images]);
 
+  // CONSTRAINT: containerScale is ONLY for display/responsive rendering
+  // It is NEVER used in transform calculations - transformX/Y are ALWAYS in template pixels
   // Calculate container scale (actual rendered size vs template size)
   React.useEffect(() => {
     if (!containerRef.current) return;
@@ -46,50 +61,88 @@ export function Editor({ template, images, containerRef }: EditorProps) {
     return () => window.removeEventListener('resize', updateScale);
   }, [containerRef, template.width]);
 
-  const handleMouseDown = (e: React.MouseEvent, month: number) => {
-    setSelectedMonth(month);
-    // Drag logic could go here or use a library, 
-    // but for MVP simpler "Click to select, then controls" might be safer.
-    // However, prompt says "Drag to reposition".
-    // We can implement simple drag.
-  };
-
-  // Dragging logic
-  const dragStart = useRef<{x: number, y: number} | null>(null);
+  // ============================================================================
+  // Drag Logic: Image Repositioning
+  // ============================================================================
+  // CONSTRAINT: 드래그 중 누적 오차 방지
+  // - dragStartRef는 드래그 시작 시점의 기준값만 저장
+  // - mousemove 중에는 절대 갱신하지 않음
+  // - 항상 드래그 시작 시점 기준으로만 계산하여 순수 template px 유지
+  const dragStartRef = useRef<{
+    mouseX: number;  // 드래그 시작 시점의 마우스 X (screen px)
+    mouseY: number;  // 드래그 시작 시점의 마우스 Y (screen px)
+    baseX: number;   // 드래그 시작 시점의 transformX (template px)
+    baseY: number;   // 드래그 시작 시점의 transformY (template px)
+  } | null>(null);
   const activeMonthRef = useRef<number | null>(null);
 
-  const onMouseDown = (e: React.MouseEvent, month: number) => {
+  /**
+   * Start dragging an image
+   * - 드래그 시작 시점의 기준값을 고정 저장
+   * - 이후 mousemove에서는 이 기준값만 사용 (누적 오차 방지)
+   */
+  const handleDragStart = (e: React.MouseEvent, month: number) => {
     e.preventDefault();
     setSelectedMonth(month);
     activeMonthRef.current = month;
-    dragStart.current = { x: e.clientX, y: e.clientY };
+
+    // 현재 transform 값을 기준값으로 저장 (드래그 시작 시점 기준)
+    const current = transforms[month] || { scale: 1, x: 0, y: 0 };
+
+    dragStartRef.current = {
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+      baseX: current.x,
+      baseY: current.y,
+    };
   };
 
-  const onMouseMove = (e: React.MouseEvent) => {
-    if (activeMonthRef.current === null || !dragStart.current) return;
-    
+  /**
+   * Handle mouse move during drag
+   * - CONSTRAINT: 누적 방식 금지, 항상 드래그 시작 시점 기준으로만 계산
+   * - baseX + dx, baseY + dy 방식으로 순수 template px 유지
+   * - mousemove 중 dragStartRef는 절대 갱신하지 않음
+   */
+  const handleDragMove = (e: React.MouseEvent) => {
+    if (activeMonthRef.current === null || !dragStartRef.current) return;
+
+    const { mouseX, mouseY, baseX, baseY } = dragStartRef.current;
+    const containerScale = containerScaleRef.current || 1;
     const month = activeMonthRef.current;
-    // Convert screen pixels to template pixels using scale
-    const scale = containerScaleRef.current || 1;
-    const dx = (e.clientX - dragStart.current.x) / scale;
-    const dy = (e.clientY - dragStart.current.y) / scale;
-    
-    dragStart.current = { x: e.clientX, y: e.clientY };
-    
-    HZ(prev => {
-      const current = prev[month] || { scale: 1, x: 0, y: 0 };
-      return {
-        ...prev,
-        [month]: { ...current, x: current.x + dx, y: current.y + dy }
-      };
-    });
+
+    // 드래그 시작 시점부터의 총 이동량 계산 (screen px)
+    const screenDx = e.clientX - mouseX;
+    const screenDy = e.clientY - mouseY;
+
+    // CONSTRAINT: Convert screen pixels to template pixels
+    // containerScale is ONLY for display, transformX/Y are ALWAYS in template pixels
+    const templateDx = screenDx / containerScale;
+    const templateDy = screenDy / containerScale;
+
+    // CONSTRAINT: 누적 금지 - 항상 드래그 시작 시점 기준으로만 계산
+    // baseX + dx 방식으로 순수 template px 유지 (오차 누적 방지)
+    HZ((prev) => ({
+      ...prev,
+      [month]: {
+        ...(prev[month] || { scale: 1 }),
+        x: baseX + templateDx,
+        y: baseY + templateDy,
+      },
+    }));
   };
 
-  const onMouseUp = () => {
+  /**
+   * End dragging
+   * - Clears drag state
+   * - Called on mouse up or mouse leave
+   */
+  const handleDragEnd = () => {
     activeMonthRef.current = null;
-    dragStart.current = null;
+    dragStartRef.current = null;
   };
 
+  // CONSTRAINT: transformScale is ONLY for image size (width/height)
+  // It NEVER affects position calculations
   const updateScale = (month: number, delta: number) => {
     HZ(prev => {
       const current = prev[month] || { scale: 1, x: 0, y: 0 };
@@ -153,21 +206,19 @@ export function Editor({ template, images, containerRef }: EditorProps) {
       <div className="relative w-full overflow-hidden shadow-2xl rounded-sm border border-slate-200 bg-white">
         {/* We use a wrapper to maintain aspect ratio and fit in screen */}
         <div style={{ paddingBottom: `${(template.height / template.width) * 100}%` }} className="relative w-full">
-            {/* The actual content container. We'll scale this with CSS transform if needed, 
-                but actually for the Download to work best, we should render it at high res 
-                scales OR just use percentages. 
-                Using percentages is safer for responsiveness. 
-                However, drag deltas (px) need to be adjusted if we are scaled. 
-                For simplicity, we will assume 1px drag = 1px movement in the coordinate system of the container. 
+            {/* CONSTRAINT: All coordinates are in template pixel coordinate system
+                - containerScale is ONLY for responsive display
+                - transformX/Y are ALWAYS in template pixels (converted from screen via /containerScale)
+                - Export uses identical formulas when containerScale = 1
             */}
             
               <div 
                 ref={containerRef as any}
                 data-editor-container
                 className="absolute inset-0"
-                onMouseMove={onMouseMove}
-                onMouseUp={onMouseUp}
-                onMouseLeave={onMouseUp}
+                onMouseMove={handleDragMove}
+                onMouseUp={handleDragEnd}
+                onMouseLeave={handleDragEnd}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -190,7 +241,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                     <div
                       key={slot.month}
                       className="absolute overflow-hidden flex items-center justify-center cursor-grab active:cursor-grabbing"
-                      onMouseDown={(e) => img && onMouseDown(e, slot.month)}
+                      onMouseDown={(e) => img && handleDragStart(e, slot.month)}
                       data-slot-container
                       data-slot-x={slot.x}
                       data-slot-y={slot.y}
@@ -216,33 +267,52 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                           style={{
                              width: isWider ? 'auto' : '100%',
                              height: isWider ? '100%' : 'auto',
-                             // CSS transform: translate(x, y) scale(s) with transform-origin: 50% 50%
-                             // CSS applies right-to-left: scale first, then translate
-                             // translate values are absolute pixel offsets (NOT scaled)
-                             // Final image center = slot center + (transformX, transformY)
+                             // CONSTRAINT: Transform values are in template pixel coordinates
+                             // transformX/Y: center offset in template pixels (NOT multiplied by scale)
+                             // transformScale: size multiplier (ONLY affects width/height, never position)
+                             // CSS transform: translate(transformX, transformY) scale(transformScale)
+                             // transform-origin: 50% 50% (center-based)
+                             // Result: imgCenter = slotCenter + (transformX, transformY) in template pixels
                              transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`,
-                             transformOrigin: '50% 50%', // Explicitly center origin
+                             transformOrigin: '50% 50%',
                           }}
                           draggable={false}
                           onLoad={(e) => {
-                            // Debug: Log web rendering values when image loads
+                            // Verification: Log web rendering values for debugging
+                            // Only log when containerScale = 1 to verify WYSIWYG
                             if (transform.x !== 0 || transform.y !== 0 || transform.scale !== 1) {
                               const imgEl = e.currentTarget;
                               const slotContainer = imgEl.parentElement;
-                              if (slotContainer) {
-                                const containerRect = slotContainer.getBoundingClientRect();
-                                const imgRect = imgEl.getBoundingClientRect();
+                              if (slotContainer && containerRef.current) {
                                 const containerScale = containerScaleRef.current || 1;
-                                console.log(`[Web Debug Month ${slot.month}]`, {
-                                  slotCenterX: (slot.x + slot.width / 2) * containerScale,
-                                  slotCenterY: (slot.y + slot.height / 2) * containerScale,
-                                  transformX: transform.x,
-                                  transformY: transform.y,
-                                  transformScale: transform.scale,
-                                  imgCenterX: imgRect.left + imgRect.width / 2 - containerRef.current!.getBoundingClientRect().left,
-                                  imgCenterY: imgRect.top + imgRect.height / 2 - containerRef.current!.getBoundingClientRect().top,
-                                  containerScale,
-                                });
+                                // Only verify when containerScale = 1 (exact template size)
+                                if (Math.abs(containerScale - 1) < 0.01) {
+                                  const imgRect = imgEl.getBoundingClientRect();
+                                  const containerRect = containerRef.current.getBoundingClientRect();
+                                  const slotCenterX = slot.x + slot.width / 2;
+                                  const slotCenterY = slot.y + slot.height / 2;
+                                  const expectedImgCenterX = slotCenterX + transform.x;
+                                  const expectedImgCenterY = slotCenterY + transform.y;
+                                  const actualImgCenterX = (imgRect.left + imgRect.width / 2 - containerRect.left);
+                                  const actualImgCenterY = (imgRect.top + imgRect.height / 2 - containerRect.top);
+                                  const diffX = Math.abs(expectedImgCenterX - actualImgCenterX);
+                                  const diffY = Math.abs(expectedImgCenterY - actualImgCenterY);
+                                  
+                                  console.log(`[Web Verification Month ${slot.month}]`, {
+                                    slotCenterX,
+                                    slotCenterY,
+                                    transformX: transform.x,
+                                    transformY: transform.y,
+                                    transformScale: transform.scale,
+                                    expectedImgCenterX,
+                                    expectedImgCenterY,
+                                    actualImgCenterX,
+                                    actualImgCenterY,
+                                    diffX,
+                                    diffY,
+                                    match: diffX < 1 && diffY < 1,
+                                  });
+                                }
                               }
                             }
                           }}

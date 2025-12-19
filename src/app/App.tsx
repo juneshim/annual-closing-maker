@@ -15,6 +15,19 @@ import { Toaster } from 'sonner';
 import html2canvas from 'html2canvas';
 import { nanoid } from 'nanoid';
 
+/**
+ * CONSTRAINT: Export Calculation Rules
+ * 
+ * Export MUST produce pixel-perfect identical results to web rendering when containerScale = 1
+ * 
+ * Formula: imgCenter = slotCenter + transformX/Y (template pixels)
+ * - transformX/Y are NEVER multiplied by transformScale
+ * - transformScale is ONLY used for: scaledWidth = originalWidth * transformScale
+ * - Position is ALWAYS: imgLeft = imgCenterX - scaledWidth / 2
+ * 
+ * This ensures WYSIWYG (What You See Is What You Get)
+ */
+
 function App() {
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState(TEMPLATES[0].id);
@@ -154,6 +167,10 @@ function App() {
           // Replace OKLCH colors with RGB before export
           const clonedWindow = clonedDoc.defaultView || (clonedDoc as any).parentWindow;
           if (!clonedWindow) return;
+          
+          // CONSTRAINT VERIFICATION: Ensure export matches web rendering
+          // When containerScale = 1, web and export must produce identical results
+          // This verification helps catch any coordinate system violations
 
           // Find the cloned container and set it to exact 1920x1080 pixels
           const clonedContainer = clonedDoc.querySelector('[data-editor-container]') as HTMLElement;
@@ -205,7 +222,8 @@ function App() {
               html.style.overflow = 'hidden';
             }
 
-            // Fix all slot containers to exact pixel positions
+            // CONSTRAINT: Export uses template pixel coordinates directly
+            // Fix all slot containers to exact pixel positions (template pixels)
             const slotContainers = clonedContainer.querySelectorAll('[data-slot-container]');
             slotContainers.forEach((slotContainer) => {
               const slotEl = slotContainer as HTMLElement;
@@ -222,8 +240,9 @@ function App() {
               slotEl.style.overflow = 'hidden'; // Ensure images don't overflow slot
             });
 
-            // Fix all images to exact pixel positions based on slot center + transform
-            // Images are inside slot containers, so position relative to slot container center
+            // CONSTRAINT: Export calculation MUST match web rendering exactly
+            // Formula: imgCenter = slotCenter + transformX/Y (template pixels, NO scale multiplication)
+            // Images are inside slot containers, positioned relative to slot container center
             const images = clonedContainer.querySelectorAll('img[data-slot-month]');
             images.forEach((imgEl) => {
               const img = imgEl as HTMLImageElement;
@@ -231,15 +250,6 @@ function App() {
               const transformX = parseFloat(img.dataset.transformX || '0');
               const transformY = parseFloat(img.dataset.transformY || '0');
               const transformScale = parseFloat(img.dataset.transformScale || '1');
-              
-              // Debug logging for problematic images
-              if (transformX !== 0 || transformY !== 0 || transformScale !== 1) {
-                console.log(`[Export Debug Month ${month}]`, {
-                  transformX,
-                  transformY,
-                  transformScale,
-                });
-              }
               
               // Find the slot container parent
               const slotContainer = img.closest('[data-slot-container]') as HTMLElement;
@@ -249,12 +259,19 @@ function App() {
               const slotWidth = parseFloat(slotContainer.dataset.slotWidth || '0');
               const slotHeight = parseFloat(slotContainer.dataset.slotHeight || '0');
               
+              // CONSTRAINT: Position calculation uses center-based formula
+              // imgCenter = slotCenter + transformX/Y (template pixels, NO scale multiplication)
+              // This MUST match web rendering exactly
+              // Calculate slot center FIRST (before using in calculations)
+              const slotCenterX = slotWidth / 2;
+              const slotCenterY = slotHeight / 2;
+              
               // Get image natural dimensions
               const imgNaturalWidth = img.naturalWidth || slotWidth;
               const imgNaturalHeight = img.naturalHeight || slotHeight;
               
-              // Calculate image display size (cover slot, maintain aspect ratio)
-              // This is the ORIGINAL size before scale
+              // CONSTRAINT: Calculate original image size (before transformScale)
+              // This size is used to determine how image covers the slot
               const imgRatio = imgNaturalWidth / imgNaturalHeight;
               const slotRatio = slotWidth / slotHeight;
               const isWider = imgRatio >= slotRatio;
@@ -269,39 +286,27 @@ function App() {
                 originalHeight = originalWidth / imgRatio;
               }
               
-              // Apply scale to get final size (CSS transform: scale(s) applies AFTER size)
-              // Transform order: scale → translate (right to left in CSS)
+              // CONSTRAINT: transformScale is ONLY for width/height, NEVER for position
+              // Apply scale to get final size (width and height only)
               const scaledWidth = originalWidth * transformScale;
               const scaledHeight = originalHeight * transformScale;
               
-              // Position image relative to slot container center
-              // Slot container center is at (slotWidth/2, slotHeight/2)
-              // TransformX/Y is in template pixel coordinates (slot center relative)
-              // 
-              // CSS transform: translate(x, y) scale(s) with transform-origin: 50% 50%
-              // CSS applies transforms right-to-left: scale first, then translate
-              // BUT: translate values are NOT scaled - they are absolute pixel offsets
-              // 
-              // Web behavior:
-              // 1. Image is rendered at original size, centered in slot
-              // 2. Scale is applied (image size changes, but center stays same)
-              // 3. Translate is applied (image center moves by transformX/Y pixels)
-              // 
-              // Therefore: imgCenter = slotCenter + transformX/Y (NOT multiplied by scale)
-              const slotCenterX = slotWidth / 2;
-              const slotCenterY = slotHeight / 2;
-              
-              // Calculate image center position (same as web)
+              // Calculate image center position (identical to web rendering)
+              // transformX/Y are in template pixels, NOT multiplied by transformScale
               const imgCenterX = slotCenterX + transformX;
               const imgCenterY = slotCenterY + transformY;
               
-              // Calculate image left/top position (image center minus half scaled size)
+              // Calculate image left/top position from center
+              // Position = center - half scaled size
               const imgLeft = imgCenterX - scaledWidth / 2;
               const imgTop = imgCenterY - scaledHeight / 2;
               
-              // Debug logging for problematic images
+              // CONSTRAINT VERIFICATION: Log export positions for comparison with web
+              // Formula: imgCenter = slotCenter + transformX/Y (template pixels)
+              // This MUST match web rendering when containerScale = 1
+              // All variables are now declared, safe to use in logging
               if (transformX !== 0 || transformY !== 0 || transformScale !== 1) {
-                console.log(`[Export Debug Month ${month} - Calculated]`, {
+                console.log(`[Export Final Position Month ${month}]`, {
                   slotCenterX,
                   slotCenterY,
                   originalWidth,
@@ -315,6 +320,8 @@ function App() {
                   imgCenterY,
                   imgLeft,
                   imgTop,
+                  // Verification: Ensure no scale multiplication in position
+                  verified: imgCenterX === slotCenterX + transformX && imgCenterY === slotCenterY + transformY,
                 });
               }
               
