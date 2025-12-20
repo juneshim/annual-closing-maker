@@ -38,9 +38,14 @@ export function Footer() {
           </a>
         </div>
         
-        <p className="text-xs sm:text-sm text-slate-500 pt-2">
-          © Hello_ganadi
-        </p>
+        <a
+          href="https://x.com/Hello_ganadi"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs sm:text-sm text-slate-500 hover:text-slate-700 pt-2 inline-block transition-colors"
+        >
+          © 온세상 가나디
+        </a>
       </div>
     </footer>
   );
