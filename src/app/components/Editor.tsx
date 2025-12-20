@@ -258,6 +258,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                         width: `${(slot.width / template.width) * 100}%`,
                         height: `${(slot.height / template.height) * 100}%`,
                         zIndex: 1, // Below template overlay
+                        position: 'absolute',
                       }}
                     >
                       {img ? (
@@ -344,7 +345,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
               {/* PNG 프레임 이미지를 그대로 위에 덮어씌우는 방식 (frame-1.PNG는 투명 슬롯을 포함한 이미지라고 가정) */}
               <div 
                  className="absolute inset-0 pointer-events-none"
-                 style={{ zIndex: 10 }}
+                 style={{ zIndex: 100, position: 'absolute' }}
               >
                 <img
                   src={template.imageUrl}
