@@ -1,93 +1,96 @@
-# 2025 Year-End Recap
+🇰🇷 한국어 | [🇺🇸 English](README.en.md)
 
-Upload your photos and we'll turn a year into a single image ₍ᐢ..ᐢ₎⊹
+# 2025 연말 정산
 
-## Project Overview
+사진을 올리면 1년을 한 장으로 정리해드려요 ₍ᐢ..ᐢ₎⊹
 
-A web application designed for users who want to reflect on their year as it comes to an end. Upload photos from 12 months of memories, and we'll create a beautiful year-end recap image for you.
+## 프로젝트 소개
 
-## User Experience (UX) Goals
+연말을 맞아 한 해를 되돌아보고 싶은 사용자들을 위한 웹 애플리케이션입니다. 12개월간의 추억을 담은 사진들을 업로드하면, 하나의 아름다운 연말 정산 이미지로 만들어줍니다.
 
-This project was designed not as a simple image generation tool, but as an **experience that captures the emotions of this special year-end moment**.
+## 사용자 경험(UX) 목표
 
-### 1. Emotional Year-End Experience
+이 프로젝트는 단순한 이미지 생성 도구가 아니라, **연말이라는 특별한 시점의 감정을 담아내는 경험**을 목표로 설계했습니다.
 
-- **Warm-toned microcopy**: Messages that acknowledge and encourage users' efforts, such as "Upload your photos and we'll turn a year into a single image ₍ᐢ..ᐢ₎⊹" and "You've worked so hard this year ✨"
-- **Year-end sentiment**: An interface that creates meaningful moments of reflection, not just a list of features
-- **Visual feedback**: A rainbow cat Lottie animation during loading to make waiting time enjoyable
+### 1. 감정적인 연말 마무리 경험
 
-### 2. UX Microcopy Improvements
+- **따뜻한 톤의 마이크로카피**: "사진을 올리면 1년을 한 장으로 정리해드려요 ₍ᐢ..ᐢ₎⊹", "올 한 해 정말 수고 많으셨어요 ✨"와 같이 사용자의 노력을 인정하고 격려하는 메시지
+- **연말의 감성**: 단순한 기능 나열이 아닌, 한 해를 돌아보는 의미 있는 순간을 만들어내는 인터페이스
+- **시각적 피드백**: 로딩 중 무지개 고양이 Lottie 애니메이션으로 대기 시간도 즐겁게
 
-All text was written with consideration for users' emotions and context:
+### 2. UX 마이크로카피 개선
 
-- **Error messages**: Friendly and easy-to-understand expressions like "This file is too large" and "This format isn't supported" that don't blame users for mistakes
-- **Guidance text**: Natural prompts for next actions, such as "Drag to adjust position" and "Click a photo to change its size and position"
-- **Status messages**: Clear and warm progress updates like "Creating your year-end recap image..."
+모든 텍스트를 사용자의 감정과 맥락을 고려하여 작성했습니다:
 
-### 3. Error and Empty State Handling
+- **에러 메시지**: "파일이 너무 커요", "지원하지 않는 형식이에요"처럼 친근하고 이해하기 쉬운 표현으로 사용자의 실수를 비난하지 않음
+- **안내 문구**: "드래그해서 위치를 조정하세요", "사진을 클릭해 크기와 위치를 바꿀 수 있어요"처럼 다음 행동을 자연스럽게 유도
+- **상태 메시지**: "연말 정산 이미지를 만들고 있어요..."처럼 진행 상황을 명확하고 따뜻하게 전달
 
-Designed so users never feel lost, even when they make mistakes or encounter unexpected situations:
+### 3. 에러 및 빈 상태 처리
 
-- **Empty state guidance**: 
-  - Clear indicators like "No photos yet" in empty slots during editing
-  - A modal explaining "Some months are empty" with options provided when months are missing
-- **Error recovery**: 
-  - Friendly messages with specific file names when uploads fail ("{fileName} is too large")
-  - Clear guidance for each situation (unsupported formats, size limits, etc.)
-- **Freedom of choice**: 
-  - Options to "Leave empty" or "Fill with default image" when months are missing
-  - Flexibility to complete the year-end recap image as users prefer
+사용자가 실수하거나 예상치 못한 상황에 마주해도 당황하지 않도록 설계했습니다:
 
-### 4. User-Centered Interactions
+- **빈 상태 안내**: 
+  - 편집 화면에서 사진이 없는 슬롯에 "아직 사진이 없어요" 표시
+  - 누락된 월이 있을 때 "비어 있는 달이 있어요" 모달로 상황을 명확히 설명하고 선택권 제공
+- **에러 복구**: 
+  - 파일 업로드 실패 시 구체적인 파일명과 함께 친근한 메시지 표시 ("{fileName} 파일이 너무 커요")
+  - 지원하지 않는 형식이나 크기 초과 등 각 상황에 맞는 명확한 안내
+- **선택의 자유**: 
+  - 누락된 월이 있을 때 "비워두기" 또는 "기본 이미지로 채우기" 옵션 제공
+  - 사용자가 원하는 대로 연말 정산 이미지를 완성할 수 있도록 유연성 확보
 
-- **Intuitive drag and drop**: Reorder images in the thumbnail grid, adjust positions in the editor
-- **Automatic month assignment**: Automatically assign uploaded photos to months sequentially, minimizing manual work
-- **Real-time editing**: Instantly see changes when selecting images, adjusting size, or moving positions
-- **Responsive design**: Natural user experience across all devices from mobile to desktop
+### 4. 사용자 중심 인터랙션
 
-## Key Features
+- **직관적인 드래그 앤 드롭**: 썸네일 그리드에서 이미지 순서 조정, 편집 화면에서 이미지 위치 조정
+- **월 자동 배정**: 업로드한 사진을 순차적으로 월에 자동 할당하여 수동 작업 최소화
+- **실시간 편집**: 이미지 선택, 크기 조정, 위치 이동을 즉시 확인 가능
+- **반응형 디자인**: 모바일부터 데스크톱까지 모든 기기에서 자연스러운 사용 경험
 
-- Drag and drop image upload
-- Automatic and manual month assignment
-- Multiple template options
-- Real-time image editing (position adjustment, resizing)
-- High-quality PNG download (1920x1080)
+## 주요 기능
 
-## Tech Stack
+- 드래그 앤 드롭으로 간편한 이미지 업로드
+- 월별 자동 배정 및 수동 조정
+- 다양한 템플릿 선택
+- 실시간 이미지 편집 (위치 조정, 크기 변경)
+- 고품질 PNG 다운로드 (1920x1080)
 
-### Core Technologies
-- **React 18.3.1**: Component-based UI development
-- **TypeScript**: Type safety and improved developer experience
-- **Vite 6.3.5**: Fast development server and build tool
-- **Tailwind CSS 4.1.12**: Utility-first styling
+## 기술 스택
 
-### Key Libraries
-- **html2canvas**: Convert DOM to Canvas for high-quality image generation
-- **react-dnd**: Drag and drop interaction implementation
-- **react-dropzone**: File upload functionality
-- **motion**: Smooth animation effects
-- **lottie-react**: Loading animations
-- **sonner**: User-friendly toast notifications
-- **Radix UI**: Accessibility-focused UI components
+### 핵심 기술
+- **React 18.3.1**: 컴포넌트 기반 UI 개발
+- **TypeScript**: 타입 안정성과 개발자 경험 향상
+- **Vite 6.3.5**: 빠른 개발 서버와 빌드 도구
+- **Tailwind CSS 4.1.12**: 유틸리티 기반 스타일링
 
-### Key Technical Implementations
+### 주요 라이브러리
+- **html2canvas**: DOM을 Canvas로 변환하여 고품질 이미지 생성
+- **react-dnd**: 드래그 앤 드롭 인터랙션 구현
+- **react-dropzone**: 파일 업로드 기능
+- **motion**: 부드러운 애니메이션 효과
+- **lottie-react**: 로딩 애니메이션
+- **sonner**: 사용자 친화적인 토스트 알림
+- **Radix UI**: 접근성을 고려한 UI 컴포넌트
 
-#### 1. WYSIWYG Image Rendering
-- Precise coordinate system calculations to ensure web preview matches final output
-- Consistent transformation logic based on template pixel coordinates
-- Separation of `transformScale` and position coordinates (`transformX/Y`) for accurate image placement
+### 주요 기술적 구현
 
-#### 2. Real-time Image Editing
-- Drag-based position adjustment (mouse event-driven)
-- Size adjustment via slider and buttons (0.5x ~ 3x)
-- Immediate visual feedback for selected images
+#### 1. WYSIWYG 이미지 렌더링
+- 웹 화면에서 보이는 것과 동일한 결과물을 생성하기 위한 정밀한 좌표계 계산
+- 템플릿 픽셀 좌표계를 기준으로 한 일관된 변환 로직
+- `transformScale`과 위치 좌표(`transformX/Y`)를 분리하여 정확한 이미지 배치
 
-#### 3. Responsive Design
-- Mobile-first approach
-- Responsive rendering through container scaling
-- Touch-friendly minimum touch target (44px) compliance
+#### 2. 실시간 이미지 편집
+- 드래그 기반 위치 조정 (마우스 이벤트 기반)
+- 슬라이더와 버튼을 통한 크기 조정 (0.5x ~ 3x)
+- 선택된 이미지에 대한 즉각적인 시각적 피드백
 
-#### 4. State Management
-- Local state management using React Hooks
-- Efficient synchronization of image upload, template selection, and editing states
-- Clear separation of error and loading states
+#### 3. 반응형 디자인
+- 모바일 퍼스트 접근 방식
+- 컨테이너 스케일을 통한 반응형 렌더링
+- 터치 친화적인 최소 터치 영역 (44px) 보장
+
+#### 4. 상태 관리
+- React Hooks를 활용한 로컬 상태 관리
+- 이미지 업로드, 템플릿 선택, 편집 상태의 효율적인 동기화
+- 에러 상태와 로딩 상태의 명확한 분리
+
