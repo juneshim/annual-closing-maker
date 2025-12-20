@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Template, UploadedImage, TemplateSlot } from '../types';
+import { Template, UploadedImage } from '../types';
 import { ZoomIn, ZoomOut, Move } from 'lucide-react';
+import { calculateImageCoverDimensions } from '../utils/imageUtils';
 
 /**
  * CONSTRAINT: Coordinate System Rules
@@ -30,7 +31,7 @@ interface ImageTransform {
 }
 
 export function Editor({ template, images, containerRef }: EditorProps) {
-  const [transforms,HZ] = useState<Record<number, ImageTransform>>({});
+  const [transforms, setTransforms] = useState<Record<number, ImageTransform>>({});
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
   const containerScaleRef = React.useRef<number>(1);
   
@@ -121,7 +122,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
 
     // CONSTRAINT: 누적 금지 - 항상 드래그 시작 시점 기준으로만 계산
     // baseX + dx 방식으로 순수 template px 유지 (오차 누적 방지)
-    HZ((prev) => ({
+    setTransforms((prev) => ({
       ...prev,
       [month]: {
         ...(prev[month] || { scale: 1 }),
@@ -144,7 +145,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
   // CONSTRAINT: transformScale is ONLY for image size (width/height)
   // It NEVER affects position calculations
   const updateScale = (month: number, delta: number) => {
-    HZ(prev => {
+    setTransforms(prev => {
       const current = prev[month] || { scale: 1, x: 0, y: 0 };
       const newScale = Math.max(0.5, Math.min(3, current.scale + delta));
       return {
@@ -180,7 +181,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
               value={transforms[selectedMonth]?.scale || 1}
               onChange={(e) => {
                 const val = parseFloat(e.target.value);
-                HZ(prev => ({
+                setTransforms(prev => ({
                   ...prev,
                   [selectedMonth]: { ...(prev[selectedMonth] || { x: 0, y: 0 }), scale: val }
                 }));
@@ -231,11 +232,14 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                   const transform = transforms[slot.month] || { scale: 1, x: 0, y: 0 };
                   const isSelected = selectedMonth === slot.month;
 
-                  // Determine aspect ratios to cover the slot initially
-                  // Default to 1 if dimensions missing (should not happen with new upload)
-                  const imgRatio = (img?.width || 1) / (img?.height || 1);
-                  const slotRatio = slot.width / slot.height;
-                  const isWider = imgRatio >= slotRatio;
+                  // Calculate image dimensions to cover the slot
+                  const { width: coverWidth, height: coverHeight } = calculateImageCoverDimensions(
+                    img?.width || 1,
+                    img?.height || 1,
+                    slot.width,
+                    slot.height
+                  );
+                  const isWider = coverWidth >= slot.width;
 
                   return (
                     <div

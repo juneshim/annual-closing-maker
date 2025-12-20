@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Upload, Image as ImageIcon } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { UploadedImage } from '../types';
 import { nanoid } from 'nanoid';
 import { ThumbnailGrid } from './ThumbnailGrid';
 import { clsx } from 'clsx';
 import { toast } from 'sonner';
+import { autoAssignMonths } from '../utils/imageUtils';
 
 interface UploadSectionProps {
   images: UploadedImage[];
@@ -33,7 +34,7 @@ export function UploadSection({ images, setImages }: UploadSectionProps) {
     });
 
     const newImages = await Promise.all(promises);
-    setImages(prev => [...prev, ...newImages]);
+    setImages(prev => autoAssignMonths([...prev, ...newImages]));
   }, [setImages]);
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({

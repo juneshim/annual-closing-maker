@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 
 interface ConfirmModalProps {
   isOpen: boolean;

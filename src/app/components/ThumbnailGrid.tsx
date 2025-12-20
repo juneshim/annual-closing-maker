@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { UploadedImage } from '../types';
 import { X, Calendar } from 'lucide-react';
+import { autoAssignMonths } from '../utils/imageUtils';
 
 const ItemType = 'IMAGE_THUMBNAIL';
 
@@ -121,8 +122,7 @@ export function ThumbnailGrid({ images, setImages }: ThumbnailGridProps) {
         <span>Uploaded Artworks ({images.length})</span>
         <button 
            onClick={() => {
-             // Auto assign sequential months
-             setImages(prev => prev.map((img, i) => ({ ...img, month: (i % 12) + 1 })));
+             setImages(prev => autoAssignMonths(prev));
            }}
            className="text-xs sm:text-sm text-indigo-600 hover:text-indigo-800 font-medium min-h-[44px] sm:min-h-0 px-2 py-1.5 sm:px-0 sm:py-0"
         >
