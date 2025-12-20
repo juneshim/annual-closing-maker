@@ -43,6 +43,94 @@ function App() {
   
   const editorRef = useRef<HTMLDivElement>(null);
 
+  // Block all user interactions globally (except buttons)
+  useEffect(() => {
+    // Prevent context menu (right-click menu)
+    const preventContextMenu = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      // Allow buttons, inputs, links
+      if (
+        target.tagName === 'BUTTON' ||
+        target.tagName === 'INPUT' ||
+        target.tagName === 'SELECT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'A' ||
+        target.closest('button') ||
+        target.closest('a') ||
+        target.closest('input') ||
+        target.closest('select')
+      ) {
+        return;
+      }
+      e.preventDefault();
+      return false;
+    };
+
+    // Prevent text selection
+    const preventSelect = (e: Event) => {
+      const target = e.target as HTMLElement;
+      // Allow buttons and input elements
+      if (
+        target.tagName === 'BUTTON' ||
+        target.tagName === 'INPUT' ||
+        target.tagName === 'SELECT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.closest('button') ||
+        target.closest('input') ||
+        target.closest('select')
+      ) {
+        return;
+      }
+      e.preventDefault();
+      return false;
+    };
+
+    // Prevent dragging
+    const preventDrag = (e: DragEvent) => {
+      const target = e.target as HTMLElement;
+      // Allow buttons and input elements
+      if (
+        target.tagName === 'BUTTON' ||
+        target.tagName === 'INPUT' ||
+        target.tagName === 'SELECT' ||
+        target.closest('button') ||
+        target.closest('input') ||
+        target.closest('select')
+      ) {
+        return;
+      }
+      e.preventDefault();
+      return false;
+    };
+
+    // Prevent image save (long press on mobile)
+    const preventImageSave = (e: TouchEvent) => {
+      const target = e.target as HTMLElement;
+      // Allow images inside buttons
+      if (target.closest('button') || target.closest('a')) {
+        return;
+      }
+      if (target.tagName === 'IMG') {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    document.addEventListener('contextmenu', preventContextMenu);
+    document.addEventListener('selectstart', preventSelect);
+    document.addEventListener('dragstart', preventDrag);
+    document.addEventListener('touchstart', preventImageSave, { passive: false });
+    document.addEventListener('touchmove', preventImageSave, { passive: false });
+
+    return () => {
+      document.removeEventListener('contextmenu', preventContextMenu);
+      document.removeEventListener('selectstart', preventSelect);
+      document.removeEventListener('dragstart', preventDrag);
+      document.removeEventListener('touchstart', preventImageSave);
+      document.removeEventListener('touchmove', preventImageSave);
+    };
+  }, []);
+
   // Load template slots from JSON config when template is selected
   useEffect(() => {
     const loadTemplate = async () => {

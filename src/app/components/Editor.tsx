@@ -66,29 +66,29 @@ export function Editor({ template, images, containerRef }: EditorProps) {
   // ============================================================================
   // Drag Logic: Image Repositioning
   // ============================================================================
-  // CONSTRAINT: 드래그 중 누적 오차 방지
-  // - dragStartRef는 드래그 시작 시점의 기준값만 저장
-  // - mousemove 중에는 절대 갱신하지 않음
-  // - 항상 드래그 시작 시점 기준으로만 계산하여 순수 template px 유지
+  // CONSTRAINT: Prevent cumulative error during drag
+  // - dragStartRef stores only the reference values at drag start
+  // - Never update during mousemove
+  // - Always calculate from drag start point to maintain pure template px
   const dragStartRef = useRef<{
-    mouseX: number;  // 드래그 시작 시점의 마우스 X (screen px)
-    mouseY: number;  // 드래그 시작 시점의 마우스 Y (screen px)
-    baseX: number;   // 드래그 시작 시점의 transformX (template px)
-    baseY: number;   // 드래그 시작 시점의 transformY (template px)
+    mouseX: number;  // Mouse X at drag start (screen px)
+    mouseY: number;  // Mouse Y at drag start (screen px)
+    baseX: number;   // transformX at drag start (template px)
+    baseY: number;   // transformY at drag start (template px)
   } | null>(null);
   const activeMonthRef = useRef<number | null>(null);
 
   /**
    * Start dragging an image
-   * - 드래그 시작 시점의 기준값을 고정 저장
-   * - 이후 mousemove에서는 이 기준값만 사용 (누적 오차 방지)
+   * - Store reference values at drag start
+   * - Use only these reference values in mousemove (prevent cumulative error)
    */
   const handleDragStart = (e: React.MouseEvent, month: number) => {
     e.preventDefault();
     setSelectedMonth(month);
     activeMonthRef.current = month;
 
-    // 현재 transform 값을 기준값으로 저장 (드래그 시작 시점 기준)
+    // Store current transform values as reference (at drag start)
     const current = transforms[month] || { scale: 1, x: 0, y: 0 };
 
     dragStartRef.current = {
@@ -112,7 +112,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
     const containerScale = containerScaleRef.current || 1;
     const month = activeMonthRef.current;
 
-    // 드래그 시작 시점부터의 총 이동량 계산 (screen px)
+    // Calculate total movement from drag start (screen px)
     const screenDx = e.clientX - mouseX;
     const screenDy = e.clientY - mouseY;
 
@@ -121,8 +121,8 @@ export function Editor({ template, images, containerRef }: EditorProps) {
     const templateDx = screenDx / containerScale;
     const templateDy = screenDy / containerScale;
 
-    // CONSTRAINT: 누적 금지 - 항상 드래그 시작 시점 기준으로만 계산
-    // baseX + dx 방식으로 순수 template px 유지 (오차 누적 방지)
+    // CONSTRAINT: No accumulation - always calculate from drag start point
+    // Use baseX + dx to maintain pure template px (prevent error accumulation)
     setTransforms((prev) => ({
       ...prev,
       [month]: {
@@ -151,7 +151,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
     setSelectedMonth(month);
     activeMonthRef.current = month;
 
-    // 현재 transform 값을 기준값으로 저장 (드래그 시작 시점 기준)
+    // Store current transform values as reference (at drag start)
     const current = transforms[month] || { scale: 1, x: 0, y: 0 };
     const touch = e.touches[0];
 
@@ -172,16 +172,17 @@ export function Editor({ template, images, containerRef }: EditorProps) {
     const month = activeMonthRef.current;
     const touch = e.touches[0];
 
-    // 드래그 시작 시점부터의 총 이동량 계산 (screen px)
+    // Calculate total movement from drag start (screen px)
     const screenDx = touch.clientX - mouseX;
     const screenDy = touch.clientY - mouseY;
 
     // CONSTRAINT: Convert screen pixels to template pixels
+    // Mobile touch sensitivity adjustment: 60% reduction (0.4 multiplier)
     const touchSensitivity = 0.2;
     const templateDx = (screenDx / containerScale) * touchSensitivity;
     const templateDy = (screenDy / containerScale) * touchSensitivity;
 
-    // CONSTRAINT: 누적 금지 - 항상 드래그 시작 시점 기준으로만 계산
+    // CONSTRAINT: No accumulation - always calculate from drag start point
     setTransforms((prev) => ({
       ...prev,
       [month]: {

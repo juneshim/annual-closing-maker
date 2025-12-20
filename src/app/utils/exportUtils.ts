@@ -188,8 +188,8 @@ export function prepareDocumentForExport(
       imgNaturalHeight = slotHeight;
     }
 
-    const exportTransformX = transformX * 8;
-    const exportTransformY = transformY * 8;
+    const exportTransformX = transformX * 5;
+    const exportTransformY = transformY * 5;
 
     // Calculate position and size
     const position = calculateImageExportPosition(
