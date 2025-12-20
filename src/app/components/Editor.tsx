@@ -255,7 +255,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
             </div>
           </>
         ) : (
-          <span className="text-xs sm:text-sm text-slate-400" style={{ color: 'var(--sidebar-ring)' }}>{strings.editor.clickToEdit}</span>
+          <span className="text-xs sm:text-sm text-slate-400" style={{ color: 'var(--sidebar-ring)', fontSize: '13px' }}>{strings.editor.clickToEdit}</span>
         )}
       </div>
 
