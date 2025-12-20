@@ -1,157 +1,93 @@
-# 2025 연말 정산 생성 사이트
+# 2025 Year-End Recap
 
-그림러들을 위한 간단하고 빠른 연말 정산 이미지 생성 웹사이트.
+Upload your photos and we'll turn a year into a single image ₍ᐢ..ᐢ₎⊹
 
-## 주요 기능
+## Project Overview
 
-### 1. 이미지 업로드
-- **드래그 앤 드롭**: 이미지를 드래그하여 업로드 영역에 놓으면 자동으로 업로드됩니다
-- **파일 선택**: "Select Files" 버튼을 클릭하여 파일 탐색기에서 이미지를 선택할 수 있습니다
-- **지원 형식**: PNG, JPG, JPEG
-- **파일 크기 제한**: 이미지당 최대 10MB
-- **실시간 미리보기**: 업로드된 이미지의 썸네일이 즉시 표시됩니다
+A web application designed for users who want to reflect on their year as it comes to an end. Upload photos from 12 months of memories, and we'll create a beautiful year-end recap image for you.
 
-### 2. 월별 이미지 할당
-- **수동 할당**: 각 이미지에 대해 드롭다운 메뉴에서 월(1-12월)을 선택할 수 있습니다
-- **자동 할당**: "Auto-assign Months" 버튼을 클릭하면 업로드된 이미지들이 순차적으로 월에 자동 할당됩니다
-- **드래그 앤 드롭 정렬**: 썸네일 그리드에서 이미지를 드래그하여 순서를 변경할 수 있습니다
-- **이미지 삭제**: 각 썸네일의 X 버튼을 클릭하여 이미지를 제거할 수 있습니다
+## User Experience (UX) Goals
 
-### 3. 템플릿 선택
-- **다양한 레이아웃**: 여러 템플릿 중에서 선택할 수 있습니다
-  - **Classic Grid**: 4x3 그리드 레이아웃 (12개 슬롯)
-  - **Modern Rows**: 6x2 그리드 레이아웃 (12개 슬롯)
-- **템플릿 미리보기**: 각 템플릿의 레이아웃 구조를 미리 확인할 수 있습니다
-- **해상도**: 모든 템플릿은 1920x1080 해상도로 생성됩니다
+This project was designed not as a simple image generation tool, but as an **experience that captures the emotions of this special year-end moment**.
 
-### 4. 이미지 편집
-- **드래그로 위치 조정**: 에디터에서 이미지를 클릭하고 드래그하여 위치를 조정할 수 있습니다
-- **확대/축소**: 선택된 이미지에 대해 줌 인/아웃 버튼 또는 슬라이더를 사용하여 크기를 조정할 수 있습니다
-  - 최소 배율: 0.5x
-  - 최대 배율: 3x
-- **이미지 선택**: 편집하려는 이미지를 클릭하여 선택할 수 있습니다
-- **실시간 미리보기**: 변경사항이 실시간으로 반영되어 즉시 확인할 수 있습니다
+### 1. Emotional Year-End Experience
 
-### 5. 연말 정산 생성
-- **생성 버튼**: "Generate Recap" 버튼을 클릭하여 연말 정산 이미지를 생성합니다
-- **누락된 월 확인**: 12개월 중 할당되지 않은 월이 있으면 확인 모달이 표시됩니다
-  - **빈 슬롯 유지**: 누락된 월을 빈 상태로 유지할 수 있습니다
-  - **기본 이미지로 채우기**: 누락된 월을 기본 이미지로 자동 채울 수 있습니다
-- **로딩 애니메이션**: 생성 중 로딩 오버레이가 표시됩니다
+- **Warm-toned microcopy**: Messages that acknowledge and encourage users' efforts, such as "Upload your photos and we'll turn a year into a single image ₍ᐢ..ᐢ₎⊹" and "You've worked so hard this year ✨"
+- **Year-end sentiment**: An interface that creates meaningful moments of reflection, not just a list of features
+- **Visual feedback**: A rainbow cat Lottie animation during loading to make waiting time enjoyable
 
-### 6. 다운로드
-- **PNG 형식**: 고품질 PNG 이미지로 다운로드할 수 있습니다
-- **파일명**: "2025-연말결산.png"로 자동 저장됩니다
+### 2. UX Microcopy Improvements
 
-## 기술 스택
+All text was written with consideration for users' emotions and context:
 
-### 프론트엔드
-- **React 18.3.1**: UI 라이브러리
-- **TypeScript**: 타입 안정성
-- **Vite**: 빌드 도구 및 개발 서버
-- **Tailwind CSS 4.1.12**: 유틸리티 기반 CSS 프레임워크
+- **Error messages**: Friendly and easy-to-understand expressions like "This file is too large" and "This format isn't supported" that don't blame users for mistakes
+- **Guidance text**: Natural prompts for next actions, such as "Drag to adjust position" and "Click a photo to change its size and position"
+- **Status messages**: Clear and warm progress updates like "Creating your year-end recap image..."
 
-### 주요 라이브러리
-- **react-dnd**: 드래그 앤 드롭 기능
-- **html2canvas**: HTML을 Canvas로 변환하여 이미지 생성
-- **sonner**: 토스트 알림
-- **motion**: 애니메이션 효과
-- **react-dropzone**: 파일 업로드 기능
-- **lucide-react**: 아이콘
+### 3. Error and Empty State Handling
 
-### UI 컴포넌트
-- **Radix UI**: 접근성 있는 UI 컴포넌트 라이브러리
-- **shadcn/ui**: 고품질 React 컴포넌트
+Designed so users never feel lost, even when they make mistakes or encounter unexpected situations:
 
-## 설치 및 실행
+- **Empty state guidance**: 
+  - Clear indicators like "No photos yet" in empty slots during editing
+  - A modal explaining "Some months are empty" with options provided when months are missing
+- **Error recovery**: 
+  - Friendly messages with specific file names when uploads fail ("{fileName} is too large")
+  - Clear guidance for each situation (unsupported formats, size limits, etc.)
+- **Freedom of choice**: 
+  - Options to "Leave empty" or "Fill with default image" when months are missing
+  - Flexibility to complete the year-end recap image as users prefer
 
-### 필수 요구사항
-- Node.js 18 이상
-- npm 또는 pnpm
+### 4. User-Centered Interactions
 
-### 설치
-```bash
-npm install
-# 또는
-pnpm install
-```
+- **Intuitive drag and drop**: Reorder images in the thumbnail grid, adjust positions in the editor
+- **Automatic month assignment**: Automatically assign uploaded photos to months sequentially, minimizing manual work
+- **Real-time editing**: Instantly see changes when selecting images, adjusting size, or moving positions
+- **Responsive design**: Natural user experience across all devices from mobile to desktop
 
-### 개발 서버 실행
-```bash
-npm run dev
-# 또는
-pnpm dev
-```
+## Key Features
 
-개발 서버가 실행되면 브라우저에서 `http://localhost:5173` (또는 표시된 포트)로 접속할 수 있습니다.
+- Drag and drop image upload
+- Automatic and manual month assignment
+- Multiple template options
+- Real-time image editing (position adjustment, resizing)
+- High-quality PNG download (1920x1080)
 
-### 프로덕션 빌드
-```bash
-npm run build
-# 또는
-pnpm build
-```
+## Tech Stack
 
-빌드된 파일은 `dist` 디렉토리에 생성됩니다.
+### Core Technologies
+- **React 18.3.1**: Component-based UI development
+- **TypeScript**: Type safety and improved developer experience
+- **Vite 6.3.5**: Fast development server and build tool
+- **Tailwind CSS 4.1.12**: Utility-first styling
 
-## 프로젝트 구조
+### Key Libraries
+- **html2canvas**: Convert DOM to Canvas for high-quality image generation
+- **react-dnd**: Drag and drop interaction implementation
+- **react-dropzone**: File upload functionality
+- **motion**: Smooth animation effects
+- **lottie-react**: Loading animations
+- **sonner**: User-friendly toast notifications
+- **Radix UI**: Accessibility-focused UI components
 
-```
-src/
-├── app/
-│   ├── App.tsx                 # 메인 애플리케이션 컴포넌트
-│   ├── components/
-│   │   ├── Header.tsx          # 헤더 컴포넌트
-│   │   ├── UploadSection.tsx   # 이미지 업로드 섹션
-│   │   ├── ThumbnailGrid.tsx   # 썸네일 그리드 및 월 할당
-│   │   ├── TemplateSelector.tsx # 템플릿 선택기
-│   │   ├── Editor.tsx          # 이미지 편집기
-│   │   ├── DownloadSection.tsx # 다운로드 섹션
-│   │   ├── ConfirmModal.tsx    # 확인 모달
-│   │   └── LoadingOverlay.tsx  # 로딩 오버레이
-│   ├── data/
-│   │   └── templates.ts        # 템플릿 데이터
-│   └── types.ts                # TypeScript 타입 정의
-├── styles/
-│   ├── index.css               # 전역 스타일
-│   └── tailwind.css            # Tailwind CSS
-└── main.tsx                    # 애플리케이션 진입점
-```
+### Key Technical Implementations
 
-## 사용 방법
+#### 1. WYSIWYG Image Rendering
+- Precise coordinate system calculations to ensure web preview matches final output
+- Consistent transformation logic based on template pixel coordinates
+- Separation of `transformScale` and position coordinates (`transformX/Y`) for accurate image placement
 
-1. **이미지 업로드**
-   - 드래그 앤 드롭 영역에 이미지를 드롭하거나 "Select Files" 버튼을 클릭합니다
-   - 여러 이미지를 한 번에 업로드할 수 있습니다
+#### 2. Real-time Image Editing
+- Drag-based position adjustment (mouse event-driven)
+- Size adjustment via slider and buttons (0.5x ~ 3x)
+- Immediate visual feedback for selected images
 
-2. **월 할당**
-   - 각 이미지 썸네일의 드롭다운에서 월을 선택합니다
-   - 또는 "Auto-assign Months" 버튼을 클릭하여 자동 할당합니다
+#### 3. Responsive Design
+- Mobile-first approach
+- Responsive rendering through container scaling
+- Touch-friendly minimum touch target (44px) compliance
 
-3. **템플릿 선택**
-   - 원하는 템플릿을 선택합니다
-
-4. **생성**
-   - "Generate Recap" 버튼을 클릭합니다
-   - 누락된 월이 있으면 선택 옵션이 표시됩니다
-
-5. **편집**
-   - 생성된 이미지에서 각 월의 이미지를 클릭하여 선택합니다
-   - 드래그하여 위치를 조정하고, 줌 컨트롤로 크기를 조정합니다
-
-6. **다운로드**
-   - "Download PNG" 버튼을 클릭하여 최종 이미지를 다운로드합니다
-
-## 주요 특징
-
-- ✅ 직관적인 드래그 앤 드롭 인터페이스
-- ✅ 실시간 미리보기 및 편집
-- ✅ 반응형 디자인
-- ✅ 고품질 이미지 출력 (2x 스케일)
-- ✅ 부드러운 애니메이션 효과
-- ✅ 사용자 친화적인 UI/UX
-
-## 라이선스
-
-일부 프레임의 Art는 @bdemgmr의 소유입니다.
-상업적 이용을 금합니다.
+#### 4. State Management
+- Local state management using React Hooks
+- Efficient synchronization of image upload, template selection, and editing states
+- Clear separation of error and loading states
