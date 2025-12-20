@@ -1,0 +1,77 @@
+{
+    "rectangles": [
+      {
+        "id": 1,
+        "position": { "left": 69, "top": 188 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 2,
+        "position": { "left": 371, "top": 188 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 3,
+        "position": { "left": 672, "top": 188 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 4,
+        "position": { "left": 972, "top": 188 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 5,
+        "position": { "left": 1273, "top": 188 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 6,
+        "position": { "left": 1576, "top": 188 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 7,
+        "position": { "left": 69, "top": 625 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 8,
+        "position": { "left": 371, "top": 625 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 9,
+        "position": { "left": 672, "top": 625 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 10,
+        "position": { "left": 972, "top": 625 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 11,
+        "position": { "left": 1273, "top": 625 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      },
+      {
+        "id": 12,
+        "position": { "left": 1576, "top": 625 },
+        "size": { "width": 275, "height": 378 },
+        "style": { "background": "#D9D9D9" }
+      }
+    ]
+  }
+  

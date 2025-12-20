@@ -1,0 +1,77 @@
+{
+    "rectangles": [
+      {
+        "id": 1,
+        "position": { "left": 147, "top": 247 },
+        "size": { "width": 251, "height": 342 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 2,
+        "position": { "left": 422, "top": 247 },
+        "size": { "width": 251, "height": 342 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 3,
+        "position": { "left": 697, "top": 247 },
+        "size": { "width": 251, "height": 350 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 4,
+        "position": { "left": 972, "top": 247 },
+        "size": { "width": 251, "height": 350 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 5,
+        "position": { "left": 1247, "top": 247 },
+        "size": { "width": 251, "height": 350 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 6,
+        "position": { "left": 1522, "top": 247 },
+        "size": { "width": 251, "height": 350 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 7,
+        "position": { "left": 147, "top": 626 },
+        "size": { "width": 251, "height": 350 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 8,
+        "position": { "left": 422, "top": 626 },
+        "size": { "width": 251, "height": 350 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 9,
+        "position": { "left": 697, "top": 630 },
+        "size": { "width": 251, "height": 350 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 10,
+        "position": { "left": 972, "top": 630 },
+        "size": { "width": 251, "height": 350 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 11,
+        "position": { "left": 1247, "top": 630 },
+        "size": { "width": 251, "height": 350 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      },
+      {
+        "id": 12,
+        "position": { "left": 1522, "top": 630 },
+        "size": { "width": 251, "height": 350 },
+        "style": { "background": "#FFFFFF", "borderRadius": 17 }
+      }
+    ]
+  }
+  
