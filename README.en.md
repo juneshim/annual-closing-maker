@@ -12,41 +12,6 @@ A web application designed for users who want to reflect on their year as it com
 
 This project was designed not as a simple image generation tool, but as an **experience that captures the emotions of this special year-end moment**.
 
-### 1. Emotional Year-End Experience
-
-- **Warm-toned microcopy**: Messages that acknowledge and encourage users' efforts, such as "Upload your photos and we'll turn a year into a single image ₍ᐢ..ᐢ₎⊹" and "You've worked so hard this year ✨"
-- **Year-end sentiment**: An interface that creates meaningful moments of reflection, not just a list of features
-- **Visual feedback**: A rainbow cat Lottie animation during loading to make waiting time enjoyable
-
-### 2. UX Microcopy Improvements
-
-All text was written with consideration for users' emotions and context:
-
-- **Error messages**: Friendly and easy-to-understand expressions like "This file is too large" and "This format isn't supported" that don't blame users for mistakes
-- **Guidance text**: Natural prompts for next actions, such as "Drag to adjust position" and "Click a photo to change its size and position"
-- **Status messages**: Clear and warm progress updates like "Creating your year-end recap image..."
-
-### 3. Error and Empty State Handling
-
-Designed so users never feel lost, even when they make mistakes or encounter unexpected situations:
-
-- **Empty state guidance**: 
-  - Clear indicators like "No photos yet" in empty slots during editing
-  - A modal explaining "Some months are empty" with options provided when months are missing
-- **Error recovery**: 
-  - Friendly messages with specific file names when uploads fail ("{fileName} is too large")
-  - Clear guidance for each situation (unsupported formats, size limits, etc.)
-- **Freedom of choice**: 
-  - Options to "Leave empty" or "Fill with default image" when months are missing
-  - Flexibility to complete the year-end recap image as users prefer
-
-### 4. User-Centered Interactions
-
-- **Intuitive drag and drop**: Reorder images in the thumbnail grid, adjust positions in the editor
-- **Automatic month assignment**: Automatically assign uploaded photos to months sequentially, minimizing manual work
-- **Real-time editing**: Instantly see changes when selecting images, adjusting size, or moving positions
-- **Responsive design**: Natural user experience across all devices from mobile to desktop
-
 ## Key Features
 
 - Drag and drop image upload
