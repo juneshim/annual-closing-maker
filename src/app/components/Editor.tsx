@@ -143,6 +143,59 @@ export function Editor({ template, images, containerRef }: EditorProps) {
     dragStartRef.current = null;
   };
 
+  /**
+   * Touch event handlers for mobile devices
+   */
+  const handleTouchStart = (e: React.TouchEvent, month: number) => {
+    e.preventDefault();
+    setSelectedMonth(month);
+    activeMonthRef.current = month;
+
+    // 현재 transform 값을 기준값으로 저장 (드래그 시작 시점 기준)
+    const current = transforms[month] || { scale: 1, x: 0, y: 0 };
+    const touch = e.touches[0];
+
+    dragStartRef.current = {
+      mouseX: touch.clientX,
+      mouseY: touch.clientY,
+      baseX: current.x,
+      baseY: current.y,
+    };
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (activeMonthRef.current === null || !dragStartRef.current) return;
+    e.preventDefault(); // Prevent scrolling while dragging
+
+    const { mouseX, mouseY, baseX, baseY } = dragStartRef.current;
+    const containerScale = containerScaleRef.current || 1;
+    const month = activeMonthRef.current;
+    const touch = e.touches[0];
+
+    // 드래그 시작 시점부터의 총 이동량 계산 (screen px)
+    const screenDx = touch.clientX - mouseX;
+    const screenDy = touch.clientY - mouseY;
+
+    // CONSTRAINT: Convert screen pixels to template pixels
+    const templateDx = screenDx / containerScale;
+    const templateDy = screenDy / containerScale;
+
+    // CONSTRAINT: 누적 금지 - 항상 드래그 시작 시점 기준으로만 계산
+    setTransforms((prev) => ({
+      ...prev,
+      [month]: {
+        ...(prev[month] || { scale: 1 }),
+        x: baseX + templateDx,
+        y: baseY + templateDy,
+      },
+    }));
+  };
+
+  const handleTouchEnd = () => {
+    activeMonthRef.current = null;
+    dragStartRef.current = null;
+  };
+
   // CONSTRAINT: transformScale is ONLY for image size (width/height)
   // It NEVER affects position calculations
   const updateScale = (month: number, delta: number) => {
@@ -221,6 +274,8 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                 onMouseMove={handleDragMove}
                 onMouseUp={handleDragEnd}
                 onMouseLeave={handleDragEnd}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -245,8 +300,9 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                   return (
                     <div
                       key={slot.month}
-                      className="absolute overflow-hidden flex items-center justify-center cursor-grab active:cursor-grabbing"
+                      className="absolute overflow-hidden flex items-center justify-center cursor-grab active:cursor-grabbing touch-none"
                       onMouseDown={(e) => img && handleDragStart(e, slot.month)}
+                      onTouchStart={(e) => img && handleTouchStart(e, slot.month)}
                       data-slot-container
                       data-slot-x={slot.x}
                       data-slot-y={slot.y}
@@ -259,6 +315,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                         height: `${(slot.height / template.height) * 100}%`,
                         zIndex: 1, // Below template overlay
                         position: 'absolute',
+                        touchAction: 'none', // Prevent default touch behaviors
                       }}
                     >
                       {img ? (
