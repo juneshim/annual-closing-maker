@@ -136,7 +136,23 @@ export function prepareDocumentForExport(
     slotEl.style.width = `${slotWidth}px`;
     slotEl.style.height = `${slotHeight}px`;
     slotEl.style.overflow = 'hidden';
+    slotEl.style.visibility = 'visible';
+    slotEl.style.display = 'block';
   });
+
+  // Ensure template overlay image is visible
+  const templateOverlay = clonedContainer.querySelector('img[alt="Year recap frame"]') as HTMLImageElement;
+  if (templateOverlay) {
+    templateOverlay.style.position = 'absolute';
+    templateOverlay.style.top = '0';
+    templateOverlay.style.left = '0';
+    templateOverlay.style.width = `${width}px`;
+    templateOverlay.style.height = `${height}px`;
+    templateOverlay.style.objectFit = 'fill';
+    templateOverlay.style.visibility = 'visible';
+    templateOverlay.style.display = 'block';
+    templateOverlay.style.zIndex = '100';
+  }
 
   // Fix all images to exact pixel positions
   const images = clonedContainer.querySelectorAll('img[data-slot-month]');
@@ -155,9 +171,25 @@ export function prepareDocumentForExport(
     const slotWidth = parseFloat(slotContainer.dataset.slotWidth || '0');
     const slotHeight = parseFloat(slotContainer.dataset.slotHeight || '0');
 
-    // Get image natural dimensions
-    const imgNaturalWidth = img.naturalWidth || slotWidth;
-    const imgNaturalHeight = img.naturalHeight || slotHeight;
+    // Get image natural dimensions - prefer data attributes (original image size)
+    // These are set from the UploadedImage object which has the actual image dimensions
+    let imgNaturalWidth = parseFloat(img.dataset.imgWidth || '0');
+    let imgNaturalHeight = parseFloat(img.dataset.imgHeight || '0');
+    
+    // Fallback to naturalWidth/naturalHeight if data attributes are not available
+    if (!imgNaturalWidth || !imgNaturalHeight || imgNaturalWidth === 0 || imgNaturalHeight === 0) {
+      imgNaturalWidth = img.naturalWidth || img.width || slotWidth;
+      imgNaturalHeight = img.naturalHeight || img.height || slotHeight;
+    }
+    
+    // Final fallback to slot dimensions if still not available
+    if (!imgNaturalWidth || !imgNaturalHeight || imgNaturalWidth === 0 || imgNaturalHeight === 0) {
+      imgNaturalWidth = slotWidth;
+      imgNaturalHeight = slotHeight;
+    }
+
+    const exportTransformX = transformX * 8;
+    const exportTransformY = transformY * 8;
 
     // Calculate position and size
     const position = calculateImageExportPosition(
@@ -165,8 +197,8 @@ export function prepareDocumentForExport(
       imgNaturalHeight,
       slotWidth,
       slotHeight,
-      transformX,
-      transformY,
+      exportTransformX,
+      exportTransformY,
       transformScale
     );
 
@@ -175,8 +207,10 @@ export function prepareDocumentForExport(
       console.log(`[Export Final Position Month ${month}]`, {
         slotCenterX: slotWidth / 2,
         slotCenterY: slotHeight / 2,
-        transformX,
-        transformY,
+        originalTransformX: transformX,
+        originalTransformY: transformY,
+        exportTransformX: exportTransformX,
+        exportTransformY: exportTransformY,
         transformScale,
         imgCenterX: position.left + position.width / 2,
         imgCenterY: position.top + position.height / 2,
@@ -186,6 +220,7 @@ export function prepareDocumentForExport(
       });
     }
 
+    // Ensure image is visible and properly positioned
     img.style.position = 'absolute';
     img.style.left = `${position.left}px`;
     img.style.top = `${position.top}px`;
@@ -195,6 +230,24 @@ export function prepareDocumentForExport(
     img.style.transformOrigin = '50% 50%';
     img.style.margin = '0';
     img.style.padding = '0';
+    img.style.border = 'none';
+    img.style.outline = 'none';
+    img.style.objectFit = 'cover';
+    img.style.objectPosition = 'center center';
+    img.style.imageRendering = 'auto'; // Use auto for better browser compatibility
+    img.style.display = 'block';
+    img.style.visibility = 'visible';
+    img.style.opacity = '1';
+    // Ensure image is loaded and displayed at full quality
+    img.loading = 'eager';
+    img.decoding = 'sync';
+    
+    // Force image to reload if needed
+    if (img.complete && img.naturalWidth === 0) {
+      const src = img.src;
+      img.src = '';
+      img.src = src;
+    }
   });
 }
 
@@ -305,33 +358,69 @@ export async function exportCanvasToPNG(
   // Wait for all images to load before capturing
   const images = container.querySelectorAll('img');
   const imagePromises = Array.from(images).map((img: HTMLImageElement) => {
-    if (img.complete) return Promise.resolve();
+    if (img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
+      return Promise.resolve();
+    }
     return new Promise<void>((resolve, reject) => {
-      img.onload = () => resolve();
-      img.onerror = () => reject(new Error(`Failed to load image: ${img.src}`));
-      setTimeout(() => reject(new Error('Image load timeout')), 10000);
+      const timeout = setTimeout(() => reject(new Error(`Image load timeout: ${img.src}`)), 30000);
+      img.onload = () => {
+        clearTimeout(timeout);
+        // Ensure natural dimensions are available
+        if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+          resolve();
+        } else {
+          // Wait a bit more for dimensions to be available
+          setTimeout(() => {
+            if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+              resolve();
+            } else {
+              reject(new Error(`Image dimensions not available: ${img.src}`));
+            }
+          }, 100);
+        }
+      };
+      img.onerror = () => {
+        clearTimeout(timeout);
+        reject(new Error(`Failed to load image: ${img.src}`));
+      };
+      // Force reload if image is already loaded but dimensions are missing
+      if (img.complete && (img.naturalWidth === 0 || img.naturalHeight === 0)) {
+        const src = img.src;
+        img.src = '';
+        img.src = src;
+      }
     });
   });
 
   await Promise.all(imagePromises);
-  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  // Additional wait to ensure all images are fully rendered and dimensions are set
+  await new Promise(resolve => setTimeout(resolve, 500));
 
   const width = template.width;
   const height = template.height;
 
-  const canvas = await html2canvas(container, {
-    width,
-    height,
-    scale: 1,
+  // Use scale 2 for high quality export
+  const scale = 2;
+
+  console.log('Export settings:', {
+    templateSize: { width, height },
+    scale
+  });
+
+  let canvas = await html2canvas(container, {
+    width: width,
+    height: height,
+    scale: scale,
     x: 0,
     y: 0,
     backgroundColor: '#ffffff',
-    logging: true,
+    logging: true, // Enable logging to debug
     useCORS: true,
     allowTaint: false,
-    imageTimeout: 15000,
+    imageTimeout: 30000,
     removeContainer: false,
-    foreignObjectRendering: false,
+    foreignObjectRendering: false, // Disable to avoid rendering issues
     windowWidth: width,
     windowHeight: height,
     onclone: (clonedDoc) => {
@@ -340,9 +429,38 @@ export async function exportCanvasToPNG(
     },
   });
 
-  const link = document.createElement('a');
-  link.download = `2025-연말결산.png`;
-  link.href = canvas.toDataURL('image/png');
-  link.click();
+  // If canvas size doesn't match template, resize it
+  let finalCanvas = canvas;
+  if (canvas.width !== width || canvas.height !== height) {
+    const resizedCanvas = document.createElement('canvas');
+    resizedCanvas.width = width;
+    resizedCanvas.height = height;
+    const ctx = resizedCanvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(canvas, 0, 0, width, height);
+      finalCanvas = resizedCanvas;
+    }
+  }
+
+  // Convert canvas to blob for better quality and file size
+  finalCanvas.toBlob((blob) => {
+    if (!blob) {
+      // Fallback to data URL if blob creation fails
+      const link = document.createElement('a');
+      link.download = `2025-연말결산.png`;
+      link.href = finalCanvas.toDataURL('image/png', 1.0); // Maximum quality
+      link.click();
+      return;
+    }
+    
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = `2025-연말결산.png`;
+    link.href = url;
+    link.click();
+    
+    // Clean up the object URL after a delay
+    setTimeout(() => URL.revokeObjectURL(url), 100);
+  }, 'image/png', 1.0); // Maximum quality PNG
 }
 

@@ -177,8 +177,9 @@ export function Editor({ template, images, containerRef }: EditorProps) {
     const screenDy = touch.clientY - mouseY;
 
     // CONSTRAINT: Convert screen pixels to template pixels
-    const templateDx = screenDx / containerScale;
-    const templateDy = screenDy / containerScale;
+    const touchSensitivity = 0.2;
+    const templateDx = (screenDx / containerScale) * touchSensitivity;
+    const templateDy = (screenDy / containerScale) * touchSensitivity;
 
     // CONSTRAINT: 누적 금지 - 항상 드래그 시작 시점 기준으로만 계산
     setTransforms((prev) => ({
@@ -327,6 +328,8 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                           data-transform-x={transform.x}
                           data-transform-y={transform.y}
                           data-transform-scale={transform.scale}
+                          data-img-width={img.width}
+                          data-img-height={img.height}
                           style={{
                              width: isWider ? 'auto' : '100%',
                              height: isWider ? '100%' : 'auto',
@@ -382,11 +385,9 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                         />
                       ) : (
                         <div 
-                          className="w-full h-full flex items-center justify-center text-xs"
-                          style={{ backgroundColor: '#f1f5f9', color: '#cbd5e1' }}
-                        >
-                          {strings.editor.empty}
-                        </div>
+                          className="w-full h-full"
+                          style={{ backgroundColor: '#f1f5f9' }}
+                        />
                       )}
                       {isSelected && (
                         <div 

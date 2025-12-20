@@ -79,13 +79,29 @@ function App() {
       const missingMonths = getMissingMonths(images);
       const url = '/assets/default-image.PNG';
 
+      // Load default image to get actual dimensions
+      const defaultImageDimensions = await new Promise<{ width: number; height: number }>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          resolve({
+            width: img.naturalWidth,
+            height: img.naturalHeight,
+          });
+        };
+        img.onerror = () => {
+          // Fallback to default dimensions if image fails to load
+          resolve({ width: 300, height: 200 });
+        };
+        img.src = url;
+      });
+
       const defaultImages: UploadedImage[] = missingMonths.map(m => ({
         id: nanoid(),
         file: new File([], 'default'),
         previewUrl: url,
         month: m,
-        width: 300,
-        height: 200,
+        width: defaultImageDimensions.width,
+        height: defaultImageDimensions.height,
       }));
       
       setImages(prev => [...prev, ...defaultImages]);

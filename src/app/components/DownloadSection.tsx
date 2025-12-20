@@ -8,10 +8,10 @@ interface DownloadSectionProps {
 
 export function DownloadSection({ onDownload }: DownloadSectionProps) {
   return (
-    <section className="sticky bottom-0 left-0 right-0 py-4 sm:py-8 text-center mt-6 sm:mt-8 z-50 sm:static">
+    <section className="sticky bottom-0 left-0 right-0 py-4 sm:py-8 text-center mt-6 sm:mt-8 z-[101] sm:static sm:z-auto">
       <button
         onClick={onDownload}
-        className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-indigo-600 text-white rounded-full text-base sm:text-lg font-bold shadow-lg hover:bg-indigo-700 active:scale-95 min-h-[44px] w-full max-w-xs sm:max-w-none sm:w-auto"
+        className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-indigo-600 text-white rounded-full text-base sm:text-lg font-bold shadow-lg hover:bg-indigo-700 active:scale-95 min-h-[44px] w-full max-w-xs sm:max-w-none sm:w-auto relative z-[101]"
       >
         <Download size={20} className="sm:w-6 sm:h-6" />
         {strings.download.button}
