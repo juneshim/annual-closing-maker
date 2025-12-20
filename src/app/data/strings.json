@@ -1,0 +1,64 @@
+{
+    "header": {
+      "title": "2025 연말 정산",
+      "subtitle": "사진을 올리면 1년을 한 장으로 정리해드려요 ₍ᐢ..ᐢ₎⊹"
+    },
+    "upload": {
+      "dragActive": "여기에 사진을 놓아주세요",
+      "dragInactive": "사진을 드래그하거나 클릭해서 업로드하세요",
+      "description": "PNG 또는 JPG • 이미지당 최대 10MB",
+      "selectFiles": "사진 선택하기",
+      "errors": {
+        "fileTooLarge": "{fileName} 파일이 너무 커요. (최대 10MB)",
+        "invalidType": "{fileName}은 지원하지 않는 형식이에요. PNG 또는 JPG만 가능해요.",
+        "uploadError": "{fileName} 업로드 중 문제가 발생했어요. 다시 시도해주세요."
+      }
+    },
+    "thumbnail": {
+      "title": "업로드한 사진",
+      "autoAssign": "월 자동 배정",
+      "unassigned": "미배정",
+      "months": {
+        "short": ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
+      }
+    },
+    "template": {
+      "title": "프레임 선택",
+      "dimensions": "사이즈 · 1920 x 1080"
+    },
+    "editor": {
+      "month": "월",
+      "dragToPan": "드래그해서 위치를 조정하세요",
+      "clickToEdit": "사진을 클릭해 크기와 위치를 바꿀 수 있어요",
+      "empty": "아직 사진이 없어요"
+    },
+    "download": {
+      "button": "PNG로 다운로드",
+      "description": "올 한 해 정말 수고 많으셨어요 ✨"
+    },
+    "modal": {
+      "close": "닫기",
+      "missingMonths": {
+        "title": "비어 있는 달이 있어요",
+        "message": "사진이 없는 달이 있습니다. 어떻게 처리할까요?",
+        "leaveEmpty": "비워두기",
+        "fillDefault": "기본 이미지로 채우기"
+      }
+    },
+    "loading": {
+      "generating": "연말 정산 이미지를 만들고 있어요..."
+    },
+    "app": {
+      "generateRecap": "이미지 만들기",
+      "customizeDownload": "(ﾉ´ヮ`)ﾉ*: ･ﾟ",
+      "backToEditing": "편집으로 돌아가기",
+      "toast": {
+        "uploadError": "사진을 최소 1장 이상 업로드해주세요.",
+        "editorNotReady": "아직 준비 중이에요. 잠시만 기다려주세요.",
+        "downloadStarted": "다운로드를 시작했어요!",
+        "downloadError": "이미지를 만드는 데 실패했어요. 다시 시도해주세요.",
+        "templateLoadError": "프레임을 불러오지 못했어요. 새로고침 후 다시 시도해주세요."
+      }
+    }
+  }
+  

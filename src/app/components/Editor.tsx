@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Template, UploadedImage } from '../types';
 import { ZoomIn, ZoomOut, Move } from 'lucide-react';
 import { calculateImageCoverDimensions } from '../utils/imageUtils';
+import { strings } from '../utils/strings';
 
 /**
  * CONSTRAINT: Coordinate System Rules
@@ -165,7 +166,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
       <div className="h-16 sm:h-16 flex items-center justify-center gap-2 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl w-full max-w-xl" style={{ boxShadow: 'none' }}>
         {selectedMonth ? (
           <>
-            <span className="font-medium text-sm sm:text-base text-slate-700">Month {selectedMonth}</span>
+            <span className="font-medium text-sm sm:text-base text-slate-700">{strings.editor.month} {selectedMonth}</span>
             <div className="h-6 sm:h-8 w-px bg-slate-200 mx-1 sm:mx-2" />
             <button 
               onClick={() => updateScale(selectedMonth, -0.1)}
@@ -195,11 +196,11 @@ export function Editor({ template, images, containerRef }: EditorProps) {
               <ZoomIn size={20} />
             </button>
             <div className="ml-auto text-xs text-slate-400 flex items-center gap-1 hidden sm:flex">
-              <Move size={14} /> Drag to pan
+              <Move size={14} /> {strings.editor.dragToPan}
             </div>
           </>
         ) : (
-          <span className="text-xs sm:text-sm text-slate-400" style={{ color: 'var(--sidebar-ring)' }}>Click an image to edit position and scale</span>
+          <span className="text-xs sm:text-sm text-slate-400" style={{ color: 'var(--sidebar-ring)' }}>{strings.editor.clickToEdit}</span>
         )}
       </div>
 
@@ -326,7 +327,7 @@ export function Editor({ template, images, containerRef }: EditorProps) {
                           className="w-full h-full flex items-center justify-center text-xs"
                           style={{ backgroundColor: '#f1f5f9', color: '#cbd5e1' }}
                         >
-                          Empty
+                          {strings.editor.empty}
                         </div>
                       )}
                       {isSelected && (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import Lottie from 'lottie-react';
+import { strings } from '../utils/strings';
 
 export function LoadingOverlay() {
   const [animationData, setAnimationData] = useState(null);
@@ -33,7 +34,7 @@ export function LoadingOverlay() {
             </div>
           )}
         </div>
-        <p className="text-xl font-medium text-slate-700">Generating your recap...</p>
+        <p className="text-xl font-medium text-slate-700">{strings.loading.generating}</p>
       </div>
     </motion.div>
   );

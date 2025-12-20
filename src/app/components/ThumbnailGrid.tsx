@@ -3,6 +3,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import { UploadedImage } from '../types';
 import { X, Calendar } from 'lucide-react';
 import { autoAssignMonths } from '../utils/imageUtils';
+import { strings } from '../utils/strings';
 
 const ItemType = 'IMAGE_THUMBNAIL';
 
@@ -14,10 +15,7 @@ interface ThumbnailProps {
   removeImage: (id: string) => void;
 }
 
-const MONTHS = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-];
+const MONTHS = strings.thumbnail.months.short;
 
 function Thumbnail({ image, index, moveImage, updateImageMonth, removeImage }: ThumbnailProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -72,7 +70,7 @@ function Thumbnail({ image, index, moveImage, updateImageMonth, removeImage }: T
             onChange={(e) => updateImageMonth(image.id, e.target.value ? Number(e.target.value) : null)}
             className="w-full pl-7 pr-2 py-2.5 sm:py-1 text-sm border-slate-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 bg-white min-h-[44px] sm:min-h-0"
           >
-            <option value="">Unassigned</option>
+            <option value="">{strings.thumbnail.unassigned}</option>
             {MONTHS.map((m, i) => (
               <option key={m} value={i + 1}>
                 {i + 1} - {m}
@@ -119,14 +117,14 @@ export function ThumbnailGrid({ images, setImages }: ThumbnailGridProps) {
   return (
     <div className="mt-8">
       <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
-        <span>Uploaded Artworks ({images.length})</span>
+        <span>{strings.thumbnail.title} ({images.length})</span>
         <button 
            onClick={() => {
              setImages(prev => autoAssignMonths(prev));
            }}
            className="text-xs sm:text-sm text-indigo-600 hover:text-indigo-800 font-medium min-h-[44px] sm:min-h-0 px-2 py-1.5 sm:px-0 sm:py-0"
         >
-          Auto-assign Months
+          {strings.thumbnail.autoAssign}
         </button>
       </h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">

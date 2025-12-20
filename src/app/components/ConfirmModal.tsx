@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
 import { motion } from 'motion/react';
+import { strings } from '../utils/strings';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -24,7 +25,7 @@ export function ConfirmModal({ isOpen, onClose, onConfirm }: ConfirmModalProps) 
           onClick={onClose} 
           className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 min-w-[44px] min-h-[44px] flex items-center justify-center sm:min-w-0 sm:min-h-0"
         >
-          <span className="text-sm sm:text-base">Close</span>
+          <span className="text-sm sm:text-base">{strings.modal.close}</span>
         </button>
         
         <div className="flex items-start gap-3 sm:gap-4 pr-8 sm:pr-0">
@@ -32,9 +33,9 @@ export function ConfirmModal({ isOpen, onClose, onConfirm }: ConfirmModalProps) 
             <AlertCircle size={20} className="sm:w-6 sm:h-6" />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2 sm:mb-2.5">Missing Months</h3>
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2 sm:mb-2.5">{strings.modal.missingMonths.title}</h3>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Some months don't have any artworks assigned. How would you like to proceed?
+              {strings.modal.missingMonths.message}
             </p>
             
             <div className="mt-5 sm:mt-6 flex flex-col gap-3">
@@ -42,13 +43,13 @@ export function ConfirmModal({ isOpen, onClose, onConfirm }: ConfirmModalProps) 
                 onClick={() => onConfirm(false)}
                 className="w-full py-3 sm:py-2.5 px-4 bg-white border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 active:bg-slate-100 transition-colors min-h-[44px] text-sm sm:text-base"
               >
-                Leave empty
+                {strings.modal.missingMonths.leaveEmpty}
               </button>
               <button
                 onClick={() => onConfirm(true)}
                 className="w-full py-3 sm:py-2.5 px-4 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 active:bg-indigo-800 transition-colors min-h-[44px] text-sm sm:text-base"
               >
-                Fill with default image
+                {strings.modal.missingMonths.fillDefault}
               </button>
             </div>
           </div>

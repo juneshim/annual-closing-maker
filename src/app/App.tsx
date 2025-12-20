@@ -16,6 +16,7 @@ import { Toaster } from 'sonner';
 import { nanoid } from 'nanoid';
 import { exportCanvasToPNG } from './utils/exportUtils';
 import { getMissingMonths, autoAssignMonths } from './utils/imageUtils';
+import { strings, replacePlaceholders } from './utils/strings';
 
 /**
  * CONSTRAINT: Export Calculation Rules
@@ -59,7 +60,7 @@ function App() {
         setSelectedTemplate(loadedTemplate);
       } catch (error) {
         console.error('Failed to load template config:', error);
-        toast.error('Failed to load template configuration. Please try again.');
+        toast.error(strings.app.toast.templateLoadError);
         // Set template without slots as fallback
         setSelectedTemplate(template);
       } finally {
@@ -100,7 +101,7 @@ function App() {
 
   const handleGenerateClick = () => {
     if (!hasImages) {
-      toast.error("Please upload at least one image.");
+      toast.error(strings.app.toast.uploadError);
       return;
     }
     
@@ -114,17 +115,17 @@ function App() {
 
   const handleDownload = async () => {
     if (!editorRef.current) {
-      toast.error("Editor not ready. Please wait a moment.");
+      toast.error(strings.app.toast.editorNotReady);
       return;
     }
 
     try {
       await exportCanvasToPNG(editorRef.current, selectedTemplate);
-      toast.success("Download started!");
+      toast.success(strings.app.toast.downloadStarted);
     } catch (err) {
       console.error("Download error:", err);
       const errorMessage = err instanceof Error ? err.message : String(err);
-      toast.error(`Failed to generate image: ${errorMessage}. Please try again.`);
+      toast.error(replacePlaceholders(strings.app.toast.downloadError, { message: errorMessage }));
     }
   };
 
@@ -163,7 +164,7 @@ function App() {
                     disabled={!hasImages}
                     className="w-full sm:w-auto sm:min-w-[300px] sm:px-12 py-3.5 sm:py-4 bg-slate-900 text-white rounded-full text-base sm:text-lg lg:text-xl font-bold shadow-lg hover:bg-slate-800 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all min-h-[44px]"
                   >
-                    Generate Recap
+                    {strings.app.generateRecap}
                   </button>
                 </div>
               )}
@@ -171,13 +172,13 @@ function App() {
           ) : (
             <main className="space-y-4 sm:space-y-6 lg:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
-                <h2 className="text-lg sm:text-2xl font-normal text-slate-900">Customize & Download</h2>
+                <h2 className="text-lg sm:text-2xl font-normal text-slate-900">{strings.app.customizeDownload}</h2>
                 <button 
                   onClick={() => setIsGenerated(false)}
                   className="inline-flex items-center gap-1 text-sm sm:text-base text-slate-500 hover:text-slate-900 underline font-medium min-h-[44px] sm:min-h-0 self-start sm:self-auto"
                 >
                   <ArrowLeft size={16} />
-                  Back to editing
+                  {strings.app.backToEditing}
                 </button>
               </div>
 

@@ -7,6 +7,7 @@ import { ThumbnailGrid } from './ThumbnailGrid';
 import { clsx } from 'clsx';
 import { toast } from 'sonner';
 import { autoAssignMonths } from '../utils/imageUtils';
+import { strings, replacePlaceholders } from '../utils/strings';
 
 interface UploadSectionProps {
   images: UploadedImage[];
@@ -53,11 +54,11 @@ export function UploadSection({ images, setImages }: UploadSectionProps) {
       fileRejections.forEach(({ file, errors }) => {
         errors.forEach(err => {
           if (err.code === 'file-too-large') {
-             toast.error(`File ${file.name} is too large. Max 10MB.`);
+             toast.error(replacePlaceholders(strings.upload.errors.fileTooLarge, { fileName: file.name }));
           } else if (err.code === 'file-invalid-type') {
-             toast.error(`File ${file.name} has invalid type. PNG or JPG only.`);
+             toast.error(replacePlaceholders(strings.upload.errors.invalidType, { fileName: file.name }));
           } else {
-             toast.error(`Error uploading ${file.name}: ${err.message}`);
+             toast.error(replacePlaceholders(strings.upload.errors.uploadError, { fileName: file.name, message: err.message }));
           }
         });
       });
@@ -78,13 +79,13 @@ export function UploadSection({ images, setImages }: UploadSectionProps) {
           <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600" />
         </div>
         <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-slate-900 mb-1 sm:mb-2">
-          {isDragActive ? "Drop the artworks here" : "Drag & drop your images here"}
+          {isDragActive ? strings.upload.dragActive : strings.upload.dragInactive}
         </h3>
         <p className="text-xs sm:text-sm lg:text-base text-slate-500 mb-4 sm:mb-6">
-          Upload from library • PNG or JPG • Max 10MB per image
+          {strings.upload.description}
         </p>
         <button className="px-6 py-3 sm:px-8 sm:py-3.5 lg:px-6 lg:py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors min-h-[44px] text-sm sm:text-base">
-          Select Files
+          {strings.upload.selectFiles}
         </button>
       </div>
 
