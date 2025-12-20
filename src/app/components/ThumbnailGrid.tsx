@@ -57,7 +57,12 @@ function Thumbnail({ image, index, moveImage, updateImageMonth, removeImage }: T
         />
         <button
           onClick={() => removeImage(image.id)}
-          className="absolute top-2 right-2 sm:top-1 sm:right-1 bg-black/50 hover:bg-red-500 text-white p-2 sm:p-1 rounded-full opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 transition-opacity min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 flex items-center justify-center"
+          className="absolute top-2 right-2 sm:top-1 sm:right-1 bg-black/50 hover:bg-red-500 text-white rounded-full opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 flex items-center justify-center"
+          style={{ 
+            padding: '0.7em',
+            transform: 'scale(0.7)',
+            transformOrigin: 'center center'
+          }}
         >
           <X size={18} className="sm:w-3.5 sm:h-3.5" />
         </button>
