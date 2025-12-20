@@ -37,7 +37,6 @@ export function Footer() {
             {strings.footer.twitter}
           </a>
         </div>
-        
       </div>
     </footer>
   );
