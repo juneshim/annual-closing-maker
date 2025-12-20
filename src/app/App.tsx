@@ -3,6 +3,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ArrowLeft } from 'lucide-react';
 import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 import { UploadSection } from './components/UploadSection';
 import { TemplateSelector } from './components/TemplateSelector';
 import { Editor } from './components/Editor';
@@ -131,7 +132,7 @@ function App() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen bg-white text-slate-900 font-sans pb-16 sm:pb-20">
+      <div className="min-h-screen bg-white text-slate-900 font-sans">
         <Toaster position="top-center" richColors />
         
         {(isGenerating || isLoadingTemplate) && <LoadingOverlay />}
@@ -192,6 +193,8 @@ function App() {
             </main>
           )}
         </div>
+        
+        <Footer />
       </div>
     </DndProvider>
   );
